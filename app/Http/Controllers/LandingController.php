@@ -8,7 +8,7 @@ class LandingController extends Controller
 {
     public function index()
     {
-        return view('Landing.index', [
+        return view('Landing.landing', [
             'title' => 'PerPusKu - Perpustakaan Digital',
         ]);
     }

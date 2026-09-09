@@ -13,11 +13,6 @@ class AuthController extends Controller
         ]);
     }
 
-    public function authenticate(Request $request)
-    {
-        return "Proses login";
-    }
-
     public function logout()
     {
         return "Proses logout";
