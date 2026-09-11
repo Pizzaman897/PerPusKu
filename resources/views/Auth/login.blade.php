@@ -32,7 +32,8 @@
                 </div>
             @endif
 
-            <form method="GET" action="{{ route('landing') }}" class="space-y-4">
+            <form method="POST" action="{{ route('login.authenticate') }}" class="space-y-4">
+                @csrf
 
                 {{-- Username --}}
                 <div class="relative">

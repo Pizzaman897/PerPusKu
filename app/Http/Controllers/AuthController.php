@@ -13,6 +13,17 @@ class AuthController extends Controller
         ]);
     }
 
+    public function authenticate(Request $request)
+    {
+        $username = strtolower(trim($request->input('username', '')));
+
+        if ($username === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return redirect()->route('landing');
+    }
+
     public function logout()
     {
         return "Proses logout";
