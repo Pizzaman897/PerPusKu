@@ -13,19 +13,19 @@ class BorrowingController extends Controller
         $borrowings = [
             [
                 'id' => 1,
-                'name' => 'Gajah minum air',
-                'book' => 'Fiksi',
-                'borrow_date' => 'Gajah minum air di sungai',
-                'return_date' => 'URL NYA',
-                'status' => 'Tersedia',
+                'student' => 'Budi',
+                'book_title' => 'Gajah Minum Air',
+                'borrowed_at' => '01-09-2026',
+                'returned_at' => '08-09-2026',
+                'status' => 'pinjam',
             ],
             [
                 'id' => 2,
-                'name' => 'Andi',
-                'book' => 'Belajar Pemrograman',
-                'borrow_date' => '01-09-2026',
-                'return_date' => '08-09-2026',
-                'status' => 'Menunggu Konfirmasi',
+                'student' => 'Andi',
+                'book_title' => 'Belajar Pemrograman',
+                'borrowed_at' => '01-09-2026',
+                'returned_at' => '08-09-2026',
+                'status' => 'pinjam',
             ],
         ];
 

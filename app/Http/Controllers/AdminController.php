@@ -23,10 +23,6 @@ class AdminController extends Controller
             ],
         ];
 
-        return view('Admin.Admin.index', [
-            'title' => $title,
-            'admins' => $admins,
-        ]);
     }
 
     public function create()

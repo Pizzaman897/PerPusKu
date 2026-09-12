@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\KelolaAdminController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\LandingController;
@@ -16,8 +17,10 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BorrowingController;
 
-
 Route::get('/', [LandingController::class, 'index'])
+    ->name('home');
+
+Route::get('/landing', [LandingController::class, 'index'])
     ->name('landing');
 
 
@@ -90,7 +93,7 @@ Route::prefix('admin')
         // Kelola Admin
         // ----------------------------------------------------
 
-        Route::resource('admin', AdminController::class);
+        Route::resource('kelola-admin', KelolaAdminController::class);
 
 
         // ----------------------------------------------------
