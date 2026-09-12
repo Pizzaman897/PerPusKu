@@ -10,7 +10,7 @@ class AdminDashboardController extends Controller
         $totalMurid = 220;
         $bukuDipinjam = 34;
 
-        return view('Admin.Admin.index', compact(
+        return view('Admin.DasborAdmin.index', compact(
             'totalBuku',
             'totalMurid',
             'bukuDipinjam'

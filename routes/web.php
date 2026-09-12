@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\KelolaAdminController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\LandingController;
@@ -92,7 +93,7 @@ Route::prefix('admin')
         // Kelola Admin
         // ----------------------------------------------------
 
-        Route::resource('admin', AdminController::class);
+        Route::resource('kelola-admin', KelolaAdminController::class);
 
 
         // ----------------------------------------------------
