@@ -2,18 +2,29 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>{{ $title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @vite('resources/css/app.css')
+    <title>{{ $title }}</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-50">
+<body class="bg-[#f7f7f7] text-[#111111] font-sans">
+
+    <header class="h-[90px] bg-white px-[50px] flex items-center justify-between">
+        <div class="text-[22px] font-bold">
+            📖 PerPusKu
+        </div>
+
+        <div class="flex items-center gap-[15px] font-bold">
+            <span>Halo, {{ auth()->user()->name ?? 'Admin' }}</span>
+            <img
+                src="{{ auth()->user()->foto ?? 'https://i.pravatar.cc/100?img=12' }}"
+                alt="Foto profil admin"
+                class="w-[42px] h-[42px] rounded-full object-cover"
+            >
+        </div>
+    </header>
 
 <div class="flex min-h-screen">
     <aside class="w-64 bg-white border-r border-gray-100 flex flex-col">
-        <div class="flex items-center gap-2 px-6 py-6">
-            <span class="text-2xl">📖</span>
-            <span class="text-xl font-bold text-gray-800">PerPusKu</span>
-        </div>
 
         <nav class="flex-1 px-4 space-y-1">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 font-medium">
@@ -68,11 +79,6 @@
     </aside>
 
     <div class="flex-1 flex flex-col">
-        <header class="flex items-center justify-end gap-3 bg-white border-b border-gray-100 px-8 py-4">
-            <span class="text-gray-700 font-medium">Halo, {{ auth()->user()->name ?? 'Admin' }}</span>
-            <img src="{{ auth()->user()->foto ?? 'https://i.pravatar.cc/40?img=12' }}" alt="Admin" class="w-9 h-9 rounded-full object-cover">
-        </header>
-
         <main class="flex-1 p-8">
             @if (session('success'))
                 <div class="mb-4 rounded-lg bg-green-50 text-green-700 px-4 py-3 text-sm font-medium">

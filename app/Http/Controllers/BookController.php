@@ -55,9 +55,19 @@ class BookController extends Controller
 
     public function edit(string $id)
     {
+        $buku = (object) [
+            'id' => (int) $id,
+            'title' => 'Gajah Minum Air',
+            'category' => 'fiksi',
+            'description' => '-',
+            'image_url' => 'URL NYA',
+            'status' => 'Tersedia',
+        ];
+
         return view('Admin.Book.edit', [
             'title' => 'PerPusKu - Edit Buku',
             'id' => $id,
+            'buku' => $buku,
         ]);
     }
 
