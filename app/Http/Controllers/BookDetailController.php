@@ -14,9 +14,9 @@ class BookDetailController extends Controller
             'id' => $id,
             'title' => 'Buku Kurikulum Merdeka_Matematika untuk SMA/SMK Kelas X',
             'category' => 'Pelajaran',
-            'description' => 'Buku pelajaran umum, kitab suci, dan buku pelajaran agama dengan harga yang relatif terjangkau masyarakat umum, kitab suci, dan buku pelajaran agama dengan harga yang relatif terjangkau masyarakat',
+            'description' => 'Buku pelajaran umum, kitab suci, dan buku pelajaran agama dengan harga yang relatif terjangkau masyarakat umum, kitab suci, dan buku pelajaran agama dengan harga yang relatif terjangkau masyarakat.',
             'status' => 'ada',
-            'url gambar' => 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=900&q=80',
+            'url gambar' => asset('/images/buku-1.jpg'),
         ];
 
         return view('Student.book-detail', [
@@ -32,7 +32,7 @@ class BookDetailController extends Controller
         // begitu kamu sudah punya model/tabel untuk itu.
 
         return redirect()
-            ->route('student.book.show', $id)
+            ->route('student.status')
             ->with('success', 'Buku berhasil dipinjam.');
     }
 }

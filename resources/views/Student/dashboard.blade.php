@@ -95,6 +95,7 @@
                         <option>Semua Kategori</option>
                         <option>Pelajaran</option>
                         <option>Fiksi</option>
+                        <option>Non-Fiksi</option>
                     </select>
                     <span class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">▾</span>
                 </div>

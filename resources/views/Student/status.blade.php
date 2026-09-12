@@ -83,69 +83,66 @@
             </nav>
         </aside>
 
-            {{-- Body --}}
-            <main class="p-10">
+        <!-- Content -->
+        <main class="flex-1 px-[50px] py-[35px] max-[700px]:p-[25px]">
 
-                <h1 class="text-3xl font-bold text-gray-900 mb-8">Peminjaman Saya</h1>
+            <h1 class="text-[28px] font-bold mb-[30px]">Peminjaman Saya</h1>
 
-                <div class="space-y-6">
-                    @forelse ($peminjaman as $item)
-                        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
-                            <div class="flex gap-8">
+            <div class="space-y-6">
+                @forelse ($peminjaman as $item)
+                    <div class="bg-white rounded-[10px] shadow-[0_3px_10px_rgba(0,0,0,0.08)] p-8">
+                        <div class="flex gap-8">
 
-                                {{-- Cover buku --}}
-                                <img src="{{ $item['url_gambar'] }}"
-                                     alt="{{ $item['judul_buku'] }}"
-                                     class="w-40 h-56 object-cover rounded-lg shadow-md shrink-0">
+                            {{-- Cover buku --}}
+                            <img src="{{ $item['url gambar'] }}"
+                                 alt="{{ $item['judul_buku'] }}"
+                                 class="w-40 h-56 object-cover rounded-[10px] shadow-md shrink-0">
 
-                                {{-- Info peminjaman --}}
-                                <div class="flex-1">
-                                    <div class="flex items-start justify-between">
-                                        <div>
-                                            <div class="grid grid-cols-[180px_1fr] gap-y-3">
-                                                <span class="font-bold text-gray-900">Buku</span>
-                                                <span class="text-gray-900">: {{ $item['judul_buku'] }}</span>
+                            {{-- Info peminjaman --}}
+                            <div class="flex-1 flex flex-col">
+                                <div class="flex items-start justify-between gap-6">
+                                    <div class="grid grid-cols-[180px_1fr] gap-y-3">
+                                        <span class="font-bold">Buku</span>
+                                        <span>: {{ $item['judul_buku'] }}</span>
 
-                                                <span class="font-bold text-gray-900">Tanggal peminjaman</span>
-                                                <span class="text-gray-900">: {{ $item['tanggal_pinjam'] }}</span>
+                                        <span class="font-bold">Tanggal peminjaman</span>
+                                        <span>: {{ $item['tanggal_pinjam'] }}</span>
 
-                                                <span class="font-bold text-gray-900">Batas kembali</span>
-                                                <span class="text-gray-900">: {{ $item['batas_kembali'] }}</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="flex items-center gap-2 shrink-0">
-                                            <span class="font-bold text-gray-900">Status:</span>
-                                            <span class="px-4 py-1.5 rounded-full text-sm font-semibold
-                                                {{ $item['status'] === 'meminjam'
-                                                    ? 'bg-emerald-100 text-emerald-600'
-                                                    : 'bg-gray-100 text-gray-600' }}">
-                                                {{ $item['status'] === 'meminjam' ? 'Meminjam' : 'Dikembalikan' }}
-                                            </span>
-                                        </div>
+                                        <span class="font-bold">Batas kembali</span>
+                                        <span>: {{ $item['batas_kembali'] }}</span>
                                     </div>
 
-                                    @if($item['status'] === 'meminjam')
-                                        <form method="POST" action="{{ route('student.history', $item['id']) }}" class="mt-6">
-                                            @csrf
-                                            <button type="submit"
-                                                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-xl transition">
-                                                Kembalikan
-                                            </button>
-                                        </form>
-                                    @endif
+                                    <div class="flex items-center gap-2 shrink-0">
+                                        <span class="font-bold">Status:</span>
+                                        <span class="px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap
+                                            {{ $item['status'] === 'meminjam'
+                                                ? 'bg-emerald-100 text-emerald-600'
+                                                : 'bg-gray-100 text-gray-600' }}">
+                                            {{ $item['status'] === 'meminjam' ? 'Meminjam' : 'Dikembalikan' }}
+                                        </span>
+                                    </div>
                                 </div>
+
+                                @if($item['status'] === 'meminjam')
+                                    <form method="POST" action="{{ route('student.book.kembalikan', $item['id']) }}" class="mt-auto pt-6">
+                                        @csrf
+                                        <button type="submit"
+                                                class="bg-[#4947d9] hover:bg-[#3735b8] text-white font-bold px-6 py-2.5 rounded-[10px] transition">
+                                            Kembalikan
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
                         </div>
-                    @empty
-                        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 text-center text-gray-500">
-                            Kamu belum meminjam buku apa pun.
-                        </div>
-                    @endforelse
-                </div>
+                    </div>
+                @empty
+                    <div class="bg-white rounded-[10px] shadow-[0_3px_10px_rgba(0,0,0,0.08)] p-8 text-center text-[#888888]">
+                        Kamu belum meminjam buku apa pun.
+                    </div>
+                @endforelse
+            </div>
 
-            </main>
-        </div>
+        </main>
     </div>
 
 </body>

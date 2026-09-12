@@ -119,10 +119,10 @@
 
                         <div class="mt-auto">
                             @if($book['status'] === 'ada')
-                                <form method="POST" action="{{ route('student.status', $book['id']) }}">
+                                <form method="POST" action="{{ route('student.book.pinjam', $book['id']) }}">
                                     @csrf
                                     <button type="submit"
-                                            class="bg-[#4947d9] hover:bg-[#4947d9] text-white font-bold px-8 py-3 rounded-[10px] transition">
+                                            class="bg-[#4947d9] hover:bg-[#3735b8] text-white font-bold px-8 py-3 rounded-[10px] transition">
                                         Pinjam Buku
                                     </button>
                                 </form>

@@ -17,7 +17,7 @@ class StudentDashboardController extends Controller
                 'title' => 'Matematika SMA/SMK Kelas X',
                 'source' => 'Kemendikdasmen',
                 'status' => 'ada',
-                'url gambar' => 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=400&q=80',
+                'url gambar' => asset('/images/buku-1.jpg'),
             ],
             [
                 'id' => 2,

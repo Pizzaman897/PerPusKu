@@ -53,6 +53,10 @@ Route::prefix('murid')
         Route::get('/status', [StudentStatusController::class, 'index'])
             ->name('status');
 
+        // Proses Kembalikan Buku
+        Route::post('/buku/{id}/kembalikan', [StudentStatusController::class, 'kembalikan'])
+            ->name('book.kembalikan');
+
         // History Peminjaman
         Route::get('/history', [StudentHistoryController::class, 'index'])
             ->name('history');

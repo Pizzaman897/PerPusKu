@@ -6,32 +6,34 @@ use Illuminate\Http\Request;
 
 class StudentHistoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $title = "PerPusKu - History Peminjaman";
+        $title = "PerPusKu - Riwayat Peminjaman";
 
-        $history = [
+        // Data contoh. Nanti ganti dengan query dari database/model Peminjaman
+        // (yang statusnya sudah "dikembalikan").
+        $riwayat = [
             [
                 'id' => 1,
-                'book' => 'Belajar Pemrograman',
-                'borrow_date' => '01-08-2026',
-                'return_date' => '08-08-2026',
-                'status' => 'Dikembalikan',
-                'url gambar' => 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=640&q=80',
+                'judul_buku' => 'Buku Kurikulum Merdeka_Matematika untuk SMA/SMK Kelas X',
+                'url gambar' => asset('/images/buku-1.jpg'),
+                'tanggal_pinjam' => '17 Agustus 2026',
+                'tanggal_kembali' => '20 Agustus 2026',
+                'status' => 'tepat_waktu',
             ],
             [
                 'id' => 2,
-                'book' => 'Dasar Jaringan Komputer',
-                'borrow_date' => '10-08-2026',
-                'return_date' => '17-08-2026',
-                'status' => 'Dikembalikan',
-                'url gambar' => 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=640&q=80',
+                'judul_buku' => 'Laskar Pelangi',
+                'url gambar' => 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=400&q=80',
+                'tanggal_pinjam' => '1 Agustus 2026',
+                'tanggal_kembali' => '10 Agustus 2026',
+                'status' => 'terlambat',
             ],
         ];
 
         return view('Student.history', [
             'title' => $title,
-            'history' => $history,
+            'riwayat' => $riwayat,
         ]);
     }
 }

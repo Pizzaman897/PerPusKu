@@ -15,7 +15,7 @@ class StudentStatusController extends Controller
             [
                 'id' => 1,
                 'judul_buku' => 'Buku Kurikulum Merdeka_Matematika untuk SMA/SMK Kelas X',
-                'url_gambar' => 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=400&q=80',
+                'url gambar' => asset('/images/buku-1.jpg'),
                 'tanggal_pinjam' => '17 Agustus 2026',
                 'batas_kembali' => '24 Agustus 2026',
                 'status' => 'meminjam',
