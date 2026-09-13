@@ -93,7 +93,15 @@ Route::prefix('admin')
         // Kelola Admin
         // ----------------------------------------------------
 
-        Route::resource('kelola-admin', KelolaAdminController::class);
+        Route::name('kelola-admin.')->prefix('kelola-admin')->group(function () {
+            Route::get('/', [KelolaAdminController::class, 'index'])->name('index');
+            Route::get('/create', [KelolaAdminController::class, 'create'])->name('create');
+            Route::post('/', [KelolaAdminController::class, 'store'])->name('store');
+            Route::get('/{kelola_admin}', [KelolaAdminController::class, 'show'])->name('show');
+            Route::get('/{kelola_admin}/edit', [KelolaAdminController::class, 'edit'])->name('edit');
+            Route::put('/{kelola_admin}', [KelolaAdminController::class, 'update'])->name('update');
+            Route::delete('/{kelola_admin}', [KelolaAdminController::class, 'destroy'])->name('destroy');
+        });
 
 
         // ----------------------------------------------------
