@@ -9,9 +9,10 @@
 <body class="bg-[#f7f7f7] text-[#111111] font-sans">
 
     <header class="h-[90px] bg-white px-[50px] flex items-center justify-between">
-        <div class="text-[22px] font-bold">
-            📖 PerPusKu
-        </div>
+            <a href="{{ url('/') }}" class="flex items-center gap-2 font-bold text-lg text-gray-900">
+                <img src="{{ asset('images/logo-perpusku.png') }}" alt="Logo PerPusKu" class="h-8 w-auto">
+                <span>PerPusKu</span>
+            </a>
 
         <div class="flex items-center gap-[15px] font-bold">
             <span>Halo, {{ auth()->user()->name ?? 'Admin' }}</span>
