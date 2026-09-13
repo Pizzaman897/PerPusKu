@@ -13,7 +13,7 @@ use App\Http\Controllers\StudentHistoryController;
 
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\BookController;
-use App\Http\Controllers\StudentController;
+use App\Http\Controllers\KelolaMuridController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BorrowingController;
 
@@ -83,10 +83,31 @@ Route::prefix('admin')
 
 
         // ----------------------------------------------------
-        // Kelola Murid
+        // Kelola Murid (route utama — dipakai oleh view Kelola-Murid)
         // ----------------------------------------------------
 
-        Route::resource('murid', StudentController::class);
+        Route::name('kelola-murid.')->prefix('kelola-murid')->group(function () {
+            Route::get('/', [KelolaMuridController::class, 'index'])->name('index');
+            Route::get('/create', [KelolaMuridController::class, 'create'])->name('create');
+            Route::post('/', [KelolaMuridController::class, 'store'])->name('store');
+            Route::get('/{kelola_murid}', [KelolaMuridController::class, 'show'])->name('show');
+            Route::get('/{kelola_murid}/edit', [KelolaMuridController::class, 'edit'])->name('edit');
+            Route::put('/{kelola_murid}', [KelolaMuridController::class, 'update'])->name('update');
+            Route::delete('/{kelola_murid}', [KelolaMuridController::class, 'destroy'])->name('destroy');
+        });
+
+        // Alias route lama "murid" -> tetap arahkan ke KelolaMuridController
+        // supaya link lama di halaman lain (Dasbor, Kelola-Admin, Buku, dll)
+        // yang masih pakai route('admin.murid.xxx') tetap berfungsi.
+        Route::name('murid.')->prefix('murid')->group(function () {
+            Route::get('/', [KelolaMuridController::class, 'index'])->name('index');
+            Route::get('/create', [KelolaMuridController::class, 'create'])->name('create');
+            Route::post('/', [KelolaMuridController::class, 'store'])->name('store');
+            Route::get('/{kelola_murid}', [KelolaMuridController::class, 'show'])->name('show');
+            Route::get('/{kelola_murid}/edit', [KelolaMuridController::class, 'edit'])->name('edit');
+            Route::put('/{kelola_murid}', [KelolaMuridController::class, 'update'])->name('update');
+            Route::delete('/{kelola_murid}', [KelolaMuridController::class, 'destroy'])->name('destroy');
+        });
 
 
         // ----------------------------------------------------
