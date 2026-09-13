@@ -9,10 +9,8 @@
     <body class="min-h-screen bg-slate-100 text-slate-900">
         <main class="mx-auto max-w-5xl px-6 py-10">
             <header class="mb-8">
-            <a href="{{ url('/') }}" class="flex items-center gap-2 font-bold text-lg text-gray-900">
-                <img src="{{ asset('images/logo-perpusku.png') }}" alt="Logo PerPusKu" class="h-8 w-auto">
-                <span>PerPusKu</span>
-            </a>                <h1 class="mt-2 text-3xl font-bold">Dashboard Murid</h1>
+                <p class="text-sm font-medium text-slate-500">PerPusKu</p>
+                <h1 class="mt-2 text-3xl font-bold">Dashboard Murid</h1>
                 <p class="mt-2 text-slate-600">Selamat datang di dashboard murid.</p>
             </header>
 
