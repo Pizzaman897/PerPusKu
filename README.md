@@ -74,3 +74,9 @@ In short: it’s a tool for students to make a quick reservation and for librari
 5. Then click ok then press "f5" and the db should appear.
    
    <img width="272" height="281" alt="image" src="https://github.com/user-attachments/assets/667f07ff-10bb-4d54-ae03-4a952a92d7ff" />
+
+## Group Member
+- Edward H.R. ; Pizzaguy897 | https://github.com/Pizzaman897 (Group 5 Leader, Lead Back End Developer)
+- Daniel Federico Theodoric ; DanielPNK | https://github.com/DanielPNK (Lead Designer UI/UX, Front End Helper)
+- Neville Owen ; Neville-Owen | https://github.com/Neville-Owen (Front End Developer, Designer UI/UX Helper)
+- Jose Marvin ; josemarvinlau2009-rgb | https://github.com/josemarvinlau2009-rgb (Lead Front End Developer, Designer UI/UX Helper)
