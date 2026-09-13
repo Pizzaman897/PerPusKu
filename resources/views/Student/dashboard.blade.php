@@ -18,21 +18,35 @@
 
             <section class="grid gap-5 sm:grid-cols-2">
                 @forelse ($books as $book)
-                    <article class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200">
-                        <img src="{{ $book['url gambar'] }}" alt="Sampul {{ $book['title'] }}" class="h-48 w-full object-cover">
-                        <div class="p-6">
-                            <p class="text-sm text-slate-500">{{ $book['category'] }}</p>
-                            <h2 class="mt-2 text-xl font-semibold">{{ $book['title'] }}</h2>
-                            <p class="mt-4 text-sm font-medium {{ $book['status'] === 'ada' ? 'text-emerald-600' : 'text-rose-600' }}">
-                            {{ $book['status'] === 'ada' ? 'Tersedia' : 'Sedang dipinjam' }}
-                            </p>
-                            <a href="{{ route('student.book.show', $book['id']) }}" class="mt-4 inline-block text-sm font-medium text-blue-600">Lihat detail</a>
+                    <a href="{{ route('student.book.show', $book['id']) }}"
+                       class="bg-white rounded-[10px] shadow-[0_3px_10px_rgba(0,0,0,0.08)] p-4 hover:shadow-[0_5px_15px_rgba(0,0,0,0.12)] transition block">
+
+                        <img src="{{ $book['url gambar'] }}"
+                             alt="{{ $book['title'] }}"
+                             class="w-full h-64 object-cover rounded-[10px] mb-4">
+
+                        <h3 class="font-bold truncate">
+                            {{ $book['title'] }}
+                        </h3>
+
+                        <p class="text-[#888888] mt-1">
+                            {{ $book['source'] }}
+                        </p>
+
+                        <div class="flex items-center gap-2 mt-3">
+                            <span class="w-2.5 h-2.5 rounded-full {{ $book['status'] === 'ada' ? 'bg-emerald-500' : 'bg-red-500' }}"></span>
+                            <span>
+                                {{ $book['status'] === 'ada' ? 'Tersedia' : 'Dipinjam' }}
+                            </span>
                         </div>
-                    </article>
+                    </a>
                 @empty
-                    <p class="text-slate-600">Belum ada buku.</p>
+                    <p class="text-[#888888] col-span-4">Belum ada buku.</p>
                 @endforelse
-            </section>
+            </div>
+
         </main>
-    </body>
+    </div>
+
+</body>
 </html>
