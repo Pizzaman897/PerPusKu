@@ -1,58 +1,70 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+### PL-GROUP-5
+# PerPusKu
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A platform designed to help students to borrow a book and to help the librarian see reservation more easily.
 
-## About Laravel
+## The Main Feature
+PerPusKu is a website that for students make an easy book reservation and help librarian easily control any reservation that the student created. It includes:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- user login
+- a dashboard for student that is included with many books selection.
+- book description.
+- student book reservation status.
+- student reservation history.
+- admin dashboard panel that can see the amount of book, student, and the book that got reserve and also can see what is the recent reservation have made.
+- a page for admin control the status for student reservation.
+- a page to add new admin, student, and books.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Technology
+Below are the list off technology that we use for this project:
+- Figma
+- Canva
+- Laravel
+- MySQL
+- Laragon
+- PHP
+- HTML
+- CSS
+- JS
+- VSC
+- Tailwind
+- GitHub
+- Blade
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+In short: it’s a tool for students to make a quick reservation and for librarian to quickly control any reservation that have been made.
 
-## Learning Laravel
+## Installation Tutorial
+### Part 1 (zip download)
+1. Download this repository by clicking the Code button in the top right.
+   
+<img width="497" height="267" alt="image" src="https://github.com/user-attachments/assets/c69e96fa-f6d3-473f-893d-6a780c321095" />
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2. Click the Download ZIP button.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+<img width="503" height="55" alt="image" src="https://github.com/user-attachments/assets/bfe24dae-1bcd-41a1-b614-cc760e27850f" />
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### Part 2 (running the code)
+1. Extract the ZIP file into your WWW folder.
+2. Open your Laragon-Cmder.
+3. Type cd [The zip file name].
+   Example:
+   
+    <img width="245" height="47" alt="image" src="https://github.com/user-attachments/assets/7bf84f13-6cc9-4623-8e67-4c6081557809" />
+5. Type "composer run dev".
+6. Then hold ctrl + left mouse click to open the localhost.
+   Example:
+   
+   <img width="1757" height="426" alt="image" src="https://github.com/user-attachments/assets/69707970-7f79-4422-b716-92909457d60f" />
 
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
-```
-
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Database Instalation
+1. After you extract this repository and open it in VSC, you have to find the "my_career.sql" file.
+   
+   <img width="392" height="115" alt="image" src="https://github.com/user-attachments/assets/3c7a9ee4-7b3b-4d7b-a623-924b668b98ed" />
+2. Now go to your laragon and click the database button.
+   
+   <img width="827" height="70" alt="image" src="https://github.com/user-attachments/assets/05b6d75d-ffff-4226-9c31-e0c534f84d40" />
+3. Make sure you already login to your myphp, then on the header click file then click run sql file then find the "perpusku_database.sql" file in www.
+   <img width="241" height="387" alt="image" src="https://github.com/user-attachments/assets/a4c9b04f-a4b9-4f0e-9222-385402b14703" />
+   <img width="728" height="157" alt="image" src="https://github.com/user-attachments/assets/067346ae-8766-4ecb-8965-909a252a3237" />
+4. Then click ok then press "f5" and the db should appear.
+   <img width="272" height="281" alt="image" src="https://github.com/user-attachments/assets/667f07ff-10bb-4d54-ae03-4a952a92d7ff" />
