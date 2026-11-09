@@ -8,7 +8,7 @@ class StudentStatusController extends Controller
 {
     public function index(Request $request)
     {
-        $title = "PerPusKu - Peminjaman Saya";
+        $title = 'PerPusKu - Peminjaman Saya';
 
         // Data contoh. Nanti ganti dengan query dari database/model Peminjaman.
         $peminjaman = [
@@ -22,7 +22,7 @@ class StudentStatusController extends Controller
             ],
         ];
 
-        return view('Student.status', [
+        return view('student.status', [
             'title' => $title,
             'peminjaman' => $peminjaman,
         ]);

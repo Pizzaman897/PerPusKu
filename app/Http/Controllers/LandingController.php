@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class LandingController extends Controller
 {
     public function index()
     {
-        return view('Landing.landing', [
+        return view('landing.landing', [
             'title' => 'PerPusKu - Perpustakaan Digital',
         ]);
     }

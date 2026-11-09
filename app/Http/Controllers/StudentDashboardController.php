@@ -8,7 +8,7 @@ class StudentDashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $title = "PerPusKu - Beranda";
+        $title = 'PerPusKu - Beranda';
 
         // Data contoh. Nanti ganti dengan query dari database/model Buku.
         $books = [
@@ -70,7 +70,7 @@ class StudentDashboardController extends Controller
             ],
         ];
 
-        return view('Student.dashboard', [
+        return view('student.dashboard', [
             'title' => $title,
             'books' => $books,
         ]);

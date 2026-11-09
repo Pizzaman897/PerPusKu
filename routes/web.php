@@ -1,21 +1,17 @@
 <?php
 
-use App\Http\Controllers\KelolaAdminController;
-use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\LandingController;
-use App\Http\Controllers\AuthController;
-
-use App\Http\Controllers\StudentDashboardController;
-use App\Http\Controllers\BookDetailController;
-use App\Http\Controllers\StudentStatusController;
-use App\Http\Controllers\StudentHistoryController;
-
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminManagementController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BookDetailController;
 use App\Http\Controllers\BorrowingController;
+use App\Http\Controllers\LandingController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentDashboardController;
+use App\Http\Controllers\StudentHistoryController;
+use App\Http\Controllers\StudentStatusController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingController::class, 'index'])
     ->name('home');
@@ -23,14 +19,12 @@ Route::get('/', [LandingController::class, 'index'])
 Route::get('/landing', [LandingController::class, 'index'])
     ->name('landing');
 
-
 // Login
 Route::get('/login', [AuthController::class, 'login'])
     ->name('login');
 
 Route::post('/login', [AuthController::class, 'authenticate'])
     ->name('login.authenticate');
-
 
 // ============================================================
 // STUDENT / MURID
@@ -69,7 +63,6 @@ Route::prefix('murid')
             ->name('logout');
     });
 
-
 // ============================================================
 // ADMIN
 // ============================================================
@@ -82,13 +75,11 @@ Route::prefix('admin')
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])
             ->name('dashboard');
 
-
         // ----------------------------------------------------
         // Kelola Buku
         // ----------------------------------------------------
 
         Route::resource('buku', BookController::class);
-
 
         // ----------------------------------------------------
         // Kelola Murid
@@ -96,21 +87,19 @@ Route::prefix('admin')
 
         Route::resource('murid', StudentController::class);
 
-
         // ----------------------------------------------------
         // Kelola Admin
         // ----------------------------------------------------
 
         Route::name('kelola-admin.')->prefix('kelola-admin')->group(function () {
-            Route::get('/', [KelolaAdminController::class, 'index'])->name('index');
-            Route::get('/create', [KelolaAdminController::class, 'create'])->name('create');
-            Route::post('/', [KelolaAdminController::class, 'store'])->name('store');
-            Route::get('/{kelola_admin}', [KelolaAdminController::class, 'show'])->name('show');
-            Route::get('/{kelola_admin}/edit', [KelolaAdminController::class, 'edit'])->name('edit');
-            Route::put('/{kelola_admin}', [KelolaAdminController::class, 'update'])->name('update');
-            Route::delete('/{kelola_admin}', [KelolaAdminController::class, 'destroy'])->name('destroy');
+            Route::get('/', [AdminManagementController::class, 'index'])->name('index');
+            Route::get('/create', [AdminManagementController::class, 'create'])->name('create');
+            Route::post('/', [AdminManagementController::class, 'store'])->name('store');
+            Route::get('/{admin}', [AdminManagementController::class, 'show'])->name('show');
+            Route::get('/{admin}/edit', [AdminManagementController::class, 'edit'])->name('edit');
+            Route::put('/{admin}', [AdminManagementController::class, 'update'])->name('update');
+            Route::delete('/{admin}', [AdminManagementController::class, 'destroy'])->name('destroy');
         });
-
 
         // ----------------------------------------------------
         // Kelola Status Peminjaman
@@ -121,7 +110,6 @@ Route::prefix('admin')
 
         Route::put('/status/{id}', [BorrowingController::class, 'update'])
             ->name('status.update');
-
 
         // ----------------------------------------------------
         // Logout

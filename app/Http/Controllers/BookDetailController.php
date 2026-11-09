@@ -8,7 +8,7 @@ class BookDetailController extends Controller
 {
     public function show(string $id)
     {
-        $title = "PerPusKu - Detail Buku";
+        $title = 'PerPusKu - Detail Buku';
 
         $book = [
             'id' => $id,
@@ -19,7 +19,7 @@ class BookDetailController extends Controller
             'url gambar' => asset('/images/buku-1.jpg'),
         ];
 
-        return view('Student.book-detail', [
+        return view('student.book-detail', [
             'title' => $title,
             'book' => $book,
         ]);

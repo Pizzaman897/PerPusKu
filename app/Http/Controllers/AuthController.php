@@ -8,7 +8,7 @@ class AuthController extends Controller
 {
     public function login()
     {
-        return view('Auth.login', [
+        return view('auth.login', [
             'title' => 'PerPusKu - Login',
         ]);
     }
@@ -26,6 +26,6 @@ class AuthController extends Controller
 
     public function logout()
     {
-        return "Proses logout";
+        return 'Proses logout';
     }
 }

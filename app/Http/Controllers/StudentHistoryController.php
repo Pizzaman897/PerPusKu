@@ -8,7 +8,7 @@ class StudentHistoryController extends Controller
 {
     public function index(Request $request)
     {
-        $title = "PerPusKu - Riwayat Peminjaman";
+        $title = 'PerPusKu - Riwayat Peminjaman';
 
         // Data contoh. Nanti ganti dengan query dari database/model Peminjaman
         // (yang statusnya sudah "dikembalikan").
@@ -31,7 +31,7 @@ class StudentHistoryController extends Controller
             ],
         ];
 
-        return view('Student.history', [
+        return view('student.history', [
             'title' => $title,
             'riwayat' => $riwayat,
         ]);
