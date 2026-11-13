@@ -7,10 +7,10 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookDetailController;
 use App\Http\Controllers\BorrowingController;
 use App\Http\Controllers\LandingController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\StudentDashboardController;
-use App\Http\Controllers\StudentHistoryController;
-use App\Http\Controllers\StudentStatusController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\UserHistoryController;
+use App\Http\Controllers\UserStatusController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingController::class, 'index'])
@@ -34,15 +34,15 @@ Route::post('/login', [AuthController::class, 'authenticate'])
     ->name('login.authenticate');
 
 // ============================================================
-// STUDENT / MURID
+// USER
 // ============================================================
 
-Route::prefix('murid')
-    ->name('student.')
+Route::prefix('user')
+    ->name('user.')
     ->group(function () {
 
         // Dashboard + Etalase Buku
-        Route::get('/dashboard', [StudentDashboardController::class, 'index'])
+        Route::get('/dashboard', [UserDashboardController::class, 'index'])
             ->name('dashboard');
 
         // Detail Buku
@@ -54,15 +54,15 @@ Route::prefix('murid')
             ->name('book.pinjam');
 
         // Status Peminjaman
-        Route::get('/status', [StudentStatusController::class, 'index'])
+        Route::get('/status', [UserStatusController::class, 'index'])
             ->name('status');
 
         // Proses Kembalikan Buku
-        Route::post('/buku/{id}/kembalikan', [StudentStatusController::class, 'kembalikan'])
+        Route::post('/buku/{id}/kembalikan', [UserStatusController::class, 'kembalikan'])
             ->name('book.kembalikan');
 
         // History Peminjaman
-        Route::get('/history', [StudentHistoryController::class, 'index'])
+        Route::get('/history', [UserHistoryController::class, 'index'])
             ->name('history');
 
         // Logout
@@ -89,10 +89,10 @@ Route::prefix('admin')
         Route::resource('buku', BookController::class);
 
         // ----------------------------------------------------
-        // Kelola Murid
+        // Kelola User
         // ----------------------------------------------------
 
-        Route::resource('murid', StudentController::class);
+        Route::resource('users', UserController::class);
 
         // ----------------------------------------------------
         // Kelola Admin

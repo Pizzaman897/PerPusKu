@@ -1,10 +1,10 @@
-@extends('layouts.student')
+@extends('layouts.user')
 
 @section('title', $title)
 
 @section('content')
     <div class="mx-auto max-w-5xl">
-        <a href="{{ route('student.dashboard') }}" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800">← Kembali ke daftar buku</a>
+        <a href="{{ route('user.dashboard') }}" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800">← Kembali ke daftar buku</a>
         <article class="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
             <div class="grid gap-8 sm:grid-cols-[240px_1fr]">
                 <img src="{{ $book['url gambar'] }}" alt="Sampul {{ $book['title'] }}" class="mx-auto aspect-[3/4] w-48 rounded-xl object-cover shadow-md sm:w-full">
@@ -17,7 +17,7 @@
                     </span>
                     <div class="mt-8">
                         @if ($book['status'] === 'ada')
-                            <form method="POST" action="{{ route('student.book.pinjam', $book['id']) }}">
+                            <form method="POST" action="{{ route('user.book.pinjam', $book['id']) }}">
                                 @csrf
                                 <button type="submit" class="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700">Pinjam buku</button>
                             </form>

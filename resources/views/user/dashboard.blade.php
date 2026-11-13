@@ -1,4 +1,4 @@
-@extends('layouts.student')
+@extends('layouts.user')
 
 @section('title', $title)
 
@@ -20,7 +20,7 @@
 
     <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
         @forelse ($books as $book)
-            <a href="{{ route('student.book.show', $book['id']) }}" class="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+            <a href="{{ route('user.book.show', $book['id']) }}" class="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
                 <img src="{{ $book['url gambar'] }}" alt="Sampul {{ $book['title'] }}" class="h-64 w-full object-cover">
                 <div class="p-5">
                     <h2 class="mt-2 truncate text-lg font-bold text-slate-900 group-hover:text-indigo-700">{{ $book['title'] }}</h2>

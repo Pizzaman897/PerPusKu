@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class StudentDashboardController extends Controller
+class UserDashboardController extends Controller
 {
     public function index(Request $request)
     {
@@ -70,7 +70,7 @@ class StudentDashboardController extends Controller
             ],
         ];
 
-        return view('student.dashboard', [
+        return view('user.dashboard', [
             'title' => $title,
             'books' => $books,
         ]);

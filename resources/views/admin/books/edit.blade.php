@@ -9,7 +9,7 @@
             <div class="mb-7">
                 <p class="text-sm font-semibold text-indigo-600">Koleksi perpustakaan</p>
                 <h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-900">Edit buku</h1>
-                <p class="mt-2 text-sm text-slate-500">Perbarui informasi {{ $buku->title }}.</p>
+                <p class="mt-2 text-sm text-slate-500">Perbarui informasi {{ $buku->judul }}.</p>
             </div>
 
             @if ($errors->any())
@@ -23,28 +23,28 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('admin.buku.update', $id) }}" class="space-y-5">
+            <form method="POST" action="{{ route('admin.buku.update', $buku) }}" class="space-y-5">
                 @csrf
                 @method('PUT')
                 <div>
                     <label for="title" class="mb-2 block text-sm font-semibold text-slate-700">Judul buku</label>
-                    <input id="title" name="title" type="text" value="{{ old('title', $buku->title) }}" required class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
+                    <input id="title" name="title" type="text" value="{{ old('title', $buku->judul) }}" required class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
+                    @error('title')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
                 <div>
                     <label for="category" class="mb-2 block text-sm font-semibold text-slate-700">Kategori</label>
-                    <select id="category" name="category" required class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
-                        <option value="fiksi" @selected(old('category', $buku->category) === 'fiksi')>Fiksi</option>
-                        <option value="non-fiksi" @selected(old('category', $buku->category) === 'non-fiksi')>Non-fiksi</option>
-                        <option value="pelajaran" @selected(old('category', $buku->category) === 'pelajaran')>Pelajaran</option>
-                    </select>
+                    <input id="category" name="category" type="text" value="{{ old('category', $buku->kategori) }}" required class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
+                    @error('category')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
                 <div>
                     <label for="description" class="mb-2 block text-sm font-semibold text-slate-700">Deskripsi</label>
-                    <textarea id="description" name="description" rows="4" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">{{ old('description', $buku->description) }}</textarea>
+                    <textarea id="description" name="description" rows="4" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">{{ old('description', $buku->deskripsi) }}</textarea>
+                    @error('description')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
                 <div>
                     <label for="image_url" class="mb-2 block text-sm font-semibold text-slate-700">URL sampul</label>
-                    <input id="image_url" name="image_url" type="url" value="{{ old('image_url', $buku->image_url) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
+                    <input id="image_url" name="image_url" type="url" value="{{ old('image_url', $buku->url_sampul) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
+                    @error('image_url')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
                 <p class="rounded-xl bg-indigo-50 px-4 py-3 text-sm text-indigo-800">Status buku mengikuti data peminjaman dan pengembalian, jadi tidak diubah dari formulir ini.</p>
                 <div class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">

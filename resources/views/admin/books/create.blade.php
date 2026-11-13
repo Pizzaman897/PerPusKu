@@ -28,23 +28,22 @@
                 <div>
                     <label for="title" class="mb-2 block text-sm font-semibold text-slate-700">Judul buku</label>
                     <input id="title" name="title" type="text" value="{{ old('title') }}" required class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" placeholder="Masukkan judul buku">
+                    @error('title')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
                 <div>
                     <label for="category" class="mb-2 block text-sm font-semibold text-slate-700">Kategori</label>
-                    <select id="category" name="category" required class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
-                        <option value="" disabled @selected(old('category') === null)>Pilih kategori</option>
-                        <option value="fiksi" @selected(old('category') === 'fiksi')>Fiksi</option>
-                        <option value="non-fiksi" @selected(old('category') === 'non-fiksi')>Non-fiksi</option>
-                        <option value="pelajaran" @selected(old('category') === 'pelajaran')>Pelajaran</option>
-                    </select>
+                    <input id="category" name="category" type="text" value="{{ old('category') }}" required class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" placeholder="Contoh: Fiksi, Non-fiksi, Pelajaran">
+                    @error('category')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
                 <div>
                     <label for="description" class="mb-2 block text-sm font-semibold text-slate-700">Deskripsi</label>
                     <textarea id="description" name="description" rows="4" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" placeholder="Ringkasan singkat buku">{{ old('description') }}</textarea>
+                    @error('description')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
                 <div>
                     <label for="image_url" class="mb-2 block text-sm font-semibold text-slate-700">URL sampul</label>
                     <input id="image_url" name="image_url" type="url" value="{{ old('image_url') }}" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" placeholder="https://">
+                    @error('image_url')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
                 <p class="rounded-xl bg-indigo-50 px-4 py-3 text-sm text-indigo-800">Status awal buku otomatis <strong>tersedia</strong>. Status berubah saat buku dipinjam atau dikembalikan.</p>
                 <div class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">

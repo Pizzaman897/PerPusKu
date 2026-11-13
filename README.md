@@ -1,19 +1,19 @@
 ### PL-GROUP-5
 # PerPusKu
 
-A platform designed to help students to borrow a book and to help the librarian see reservation more easily.
+A platform designed to help users borrow books and help librarians manage reservations.
 
 ## The Main Feature
-PerPusKu is a website that for students make an easy book reservation and help librarian easily control any reservation that the student created. It includes:
+PerPusKu is a website that helps users reserve books and helps librarians manage those reservations. It includes:
 
 - user login
-- a dashboard for student that is included with many books selection.
+- a dashboard for users that includes a selection of books.
 - book description.
-- student book reservation status.
-- student reservation history.
-- admin dashboard panel that can see the amount of book, student, and the book that got reserve and also can see what is the recent reservation have made.
-- a page for admin control the status for student reservation.
-- a page to add new admin, student, and books.
+- user book reservation status.
+- user reservation history.
+- an admin dashboard that shows book and user counts, reserved books, and recent reservations.
+- a page for admins to manage user reservations.
+- a page to add admins, users, and books.
 
 ## Technology
 Below are the list off technology that we use for this project:
@@ -31,7 +31,7 @@ Below are the list off technology that we use for this project:
 - GitHub
 - Blade
 
-In short: it’s a tool for students to make a quick reservation and for librarian to quickly control any reservation that have been made.
+In short: it’s a tool for users to reserve books and for librarians to manage reservations.
 
 ## Installation Tutorial
 ### Part 1 (zip download)

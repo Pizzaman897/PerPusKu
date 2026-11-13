@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class StudentHistoryController extends Controller
+class UserHistoryController extends Controller
 {
     public function index(Request $request)
     {
@@ -31,7 +31,7 @@ class StudentHistoryController extends Controller
             ],
         ];
 
-        return view('student.history', [
+        return view('user.history', [
             'title' => $title,
             'riwayat' => $riwayat,
         ]);

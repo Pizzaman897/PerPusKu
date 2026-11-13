@@ -41,7 +41,7 @@
         <div id="beranda" class="max-w-7xl mx-auto grid md:grid-cols-2 items-center gap-10 px-6 py-14">
             <div>
                 <h1 class="text-5xl font-extrabold text-gray-900 mb-3">PerPusKu</h1>
-                <h2 class="text-xl font-semibold text-gray-800 mb-4">Perpustakaan digital sekolah</h2>
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Perpustakaan digital</h2>
                 <p class="text-gray-600 mb-6 max-w-md">
                     Meminjam dan mengelola buku jadi lebih mudah, cepat, dan teratur
                 </p>
@@ -53,7 +53,7 @@
 
             <div class="flex justify-center">
                 <img src="{{ asset('images/ilustrasi-baca-buku.png') }}"
-                     alt="Ilustrasi siswa membaca buku"
+                     alt="Ilustrasi user membaca buku"
                      class="w-full max-w-md">
             </div>
         </div>
@@ -110,14 +110,7 @@
             </div>
             <div>
                 <p class="text-indigo-900 font-medium leading-relaxed">
-                    PERPUSKU adalah platform perpustakaan digital yang dirancang untuk memberikan pengalaman
-                    membaca dan peminjaman buku yang lebih mudah, cepat, dan terorganisir bagi siswa.
-                    Melalui PERPUSKU, siswa dapat mencari koleksi buku, melihat informasi dan ketersediaan
-                    buku, melakukan peminjaman, serta memantau riwayat peminjaman dengan lebih praktis.
-                    Kami juga membantu petugas perpustakaan dalam mengelola data buku dan transaksi
-                    peminjaman secara digital, sehingga pengelolaan perpustakaan menjadi lebih efisien.
-                    Dengan hadirnya PERPUSKU, kami berharap dapat meningkatkan minat membaca dan
-                    menciptakan lingkungan sekolah yang lebih dekat dengan literasi dan pengetahuan.
+                    PERPUSKU adalah platform perpustakaan digital yang dirancang untuk memberikan pengalaman membaca dan peminjaman buku yang lebih mudah, cepat, dan terorganisir bagi masyarakat luas. Melalui PERPUSKU, pengguna dapat mencari koleksi buku, melihat informasi dan ketersediaan buku, melakukan peminjaman, serta memantau riwayat peminjaman dengan lebih praktis. Kami juga membantu petugas perpustakaan dalam mengelola data buku dan transaksi peminjaman secara digital, sehingga pengelolaan perpustakaan menjadi lebih efisien. Dengan hadirnya PERPUSKU, kami berharap dapat meningkatkan minat membaca dan menciptakan masyarakat yang lebih dekat dengan literasi dan pengetahuan.
                 </p>
             </div>
         </div>

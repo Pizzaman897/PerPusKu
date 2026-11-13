@@ -13,9 +13,9 @@ class BorrowingController extends Controller
         $borrowings = [
             [
                 'id' => 1,
-                'student_id' => 1,
+                'user_id' => 1,
                 'book_id' => 1,
-                'student' => 'Budi',
+                'user' => 'Budi',
                 'book_title' => 'Gajah Minum Air',
                 'borrowed_at' => '01-09-2026',
                 'due_at' => '08-09-2026',
@@ -26,9 +26,9 @@ class BorrowingController extends Controller
             ],
             [
                 'id' => 2,
-                'student_id' => 2,
+                'user_id' => 2,
                 'book_id' => 2,
-                'student' => 'Andi',
+                'user' => 'Andi',
                 'book_title' => 'Belajar Pemrograman',
                 'borrowed_at' => '01-09-2026',
                 'due_at' => '08-09-2026',

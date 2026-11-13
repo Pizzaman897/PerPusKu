@@ -19,7 +19,7 @@ class BookDetailController extends Controller
             'url gambar' => asset('/images/buku-1.jpg'),
         ];
 
-        return view('student.book-detail', [
+        return view('user.book-detail', [
             'title' => $title,
             'book' => $book,
         ]);
@@ -32,7 +32,7 @@ class BookDetailController extends Controller
         // begitu kamu sudah punya model/tabel untuk itu.
 
         return redirect()
-            ->route('student.status')
+            ->route('user.status')
             ->with('success', 'Buku berhasil dipinjam.');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Admin;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -17,7 +17,7 @@ class AdminManagementController extends Controller
      */
     public function index(): View
     {
-        $admins = User::latest()->paginate(10);
+        $admins = Admin::latest()->paginate(10);
 
         return view('admin.administrators.index', compact('admins'));
     }
@@ -33,7 +33,7 @@ class AdminManagementController extends Controller
     /**
      * Tampilkan detail admin.
      */
-    public function show(User $admin): View
+    public function show(Admin $admin): View
     {
         return view('admin.administrators.show', [
             'admin' => $admin,
@@ -43,7 +43,7 @@ class AdminManagementController extends Controller
     /**
      * Tampilkan form edit admin.
      */
-    public function edit(User $admin): View
+    public function edit(Admin $admin): View
     {
         return view('admin.administrators.edit', [
             'admin' => $admin,
@@ -59,13 +59,13 @@ class AdminManagementController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:admins,email'],
         ]);
 
         $generatedPassword = Str::password(10, symbols: false);
 
         try {
-            User::create([
+            Admin::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'password' => Hash::make($generatedPassword),
@@ -84,13 +84,13 @@ class AdminManagementController extends Controller
     /**
      * Perbarui data admin (nama & email saja, tanpa password).
      */
-    public function update(Request $request, User $admin): RedirectResponse
+    public function update(Request $request, Admin $admin): RedirectResponse
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => [
                 'required', 'string', 'email', 'max:255',
-                Rule::unique('users', 'email')->ignore($admin->id),
+                Rule::unique('admins', 'email')->ignore($admin->id),
             ],
         ]);
 
@@ -110,7 +110,7 @@ class AdminManagementController extends Controller
     /**
      * Hapus admin.
      */
-    public function destroy(User $admin): RedirectResponse
+    public function destroy(Admin $admin): RedirectResponse
     {
         try {
             $admin->delete();

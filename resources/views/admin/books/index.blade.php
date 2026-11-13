@@ -3,6 +3,18 @@
 @section('title', $title)
 
 @section('content')
+    @if (session('success'))
+        <div role="status" class="mb-6 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div role="alert" class="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
             <p class="text-sm font-semibold text-indigo-600">Koleksi perpustakaan</p>
@@ -30,29 +42,29 @@
                 <tbody class="divide-y divide-slate-100">
                     @forelse ($books as $book)
                         <tr class="hover:bg-slate-50/70">
-                            <td class="whitespace-nowrap px-5 py-4 text-slate-500">#{{ $book['id'] }}</td>
+                            <td class="whitespace-nowrap px-5 py-4 text-slate-500">#{{ $book->id }}</td>
                             <td class="px-5 py-4">
                                 <div class="flex items-center gap-3">
-                                    <img src="{{ asset($book['image_url']) }}" alt="" class="h-14 w-11 rounded-lg object-cover ring-1 ring-slate-200">
+                                    <img src="{{ asset($book->url_sampul ?: 'images/buku-1.jpg') }}" alt="" class="h-14 w-11 rounded-lg object-cover ring-1 ring-slate-200">
                                     <div>
-                                        <a href="{{ route('admin.buku.show', $book['id']) }}" class="font-semibold text-slate-800 hover:text-indigo-700">{{ $book['title'] }}</a>
-                                        <p class="mt-1 max-w-md truncate text-xs text-slate-500">{{ $book['description'] }}</p>
+                                        <a href="{{ route('admin.buku.show', $book->id) }}" class="font-semibold text-slate-800 hover:text-indigo-700">{{ $book->judul }}</a>
+                                        <p class="mt-1 max-w-md truncate text-xs text-slate-500">{{ $book->deskripsi }}</p>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-5 py-4 text-slate-600">{{ ucfirst($book['category']) }}</td>
+                            <td class="px-5 py-4 text-slate-600">{{ ucfirst($book->kategori) }}</td>
                             <td class="px-5 py-4">
-                                @if ($book['status'] === 'tersedia')
-                                    <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">Tersedia</span>
-                                @else
+                                @if ($book->sedang_dipinjam)
                                     <span class="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">Dipinjam</span>
+                                @else
+                                    <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">Tersedia</span>
                                 @endif
                             </td>
                             <td class="whitespace-nowrap px-5 py-4">
                                 <div class="flex justify-end gap-3">
-                                    <a href="{{ route('admin.buku.show', $book['id']) }}" class="font-medium text-indigo-600 hover:text-indigo-800">Detail</a>
-                                    <a href="{{ route('admin.buku.edit', $book['id']) }}" class="font-medium text-slate-600 hover:text-indigo-700">Edit</a>
-                                    <form action="{{ route('admin.buku.destroy', $book['id']) }}" method="POST">
+                                    <a href="{{ route('admin.buku.show', $book->id) }}" class="font-medium text-indigo-600 hover:text-indigo-800">Detail</a>
+                                    <a href="{{ route('admin.buku.edit', $book->id) }}" class="font-medium text-slate-600 hover:text-indigo-700">Edit</a>
+                                    <form action="{{ route('admin.buku.destroy', $book) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="font-medium text-red-600 hover:text-red-800">Hapus</button>

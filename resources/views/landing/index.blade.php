@@ -28,7 +28,7 @@
                         <a href="{{ route('login') }}" class="rounded-full bg-[#bd5b3a] px-6 py-3 font-medium text-white transition hover:bg-[#a94d30]">
                             Mulai menjelajah
                         </a>
-                        <span class="flex items-center px-1 text-sm text-[#1f2a24]/55">Untuk murid dan admin</span>
+                        <span class="flex items-center px-1 text-sm text-[#1f2a24]/55">Untuk user dan admin</span>
                     </div>
                 </div>
 
@@ -42,7 +42,7 @@
                         </div>
                         <div class="mt-12 grid grid-cols-2 gap-4 border-t border-[#1f2a24]/15 pt-5 text-sm">
                             <div>
-                                <p class="font-semibold">Murid</p>
+                                <p class="font-semibold">User</p>
                                 <p class="mt-1 text-[#1f2a24]/60">Cari dan pinjam buku</p>
                             </div>
                             <div>

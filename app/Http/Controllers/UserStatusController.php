@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class StudentStatusController extends Controller
+class UserStatusController extends Controller
 {
     public function index(Request $request)
     {
@@ -22,7 +22,7 @@ class StudentStatusController extends Controller
             ],
         ];
 
-        return view('student.status', [
+        return view('user.status', [
             'title' => $title,
             'peminjaman' => $peminjaman,
         ]);
@@ -34,7 +34,7 @@ class StudentStatusController extends Controller
         // (set tanggal_kembali, ubah status buku jadi tersedia lagi, dsb)
 
         return redirect()
-            ->route('student.history')
+            ->route('user.history')
             ->with('success', 'Buku berhasil dikembalikan.');
     }
 }

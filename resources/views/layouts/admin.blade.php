@@ -29,7 +29,7 @@
             <a href="{{ route('admin.buku.index') }}" @class(['shrink-0 rounded-lg px-3 py-2 text-sm font-medium', 'bg-indigo-600 text-white' => request()->routeIs('admin.buku.*'), 'text-slate-600 hover:bg-slate-100' => ! request()->routeIs('admin.buku.*')])>Buku</a>
             <a href="{{ route('admin.status.index') }}" @class(['shrink-0 rounded-lg px-3 py-2 text-sm font-medium', 'bg-indigo-600 text-white' => request()->routeIs('admin.status.*'), 'text-slate-600 hover:bg-slate-100' => ! request()->routeIs('admin.status.*')])>Peminjaman</a>
             <a href="{{ route('admin.kelola-admin.index') }}" @class(['shrink-0 rounded-lg px-3 py-2 text-sm font-medium', 'bg-indigo-600 text-white' => request()->routeIs('admin.kelola-admin.*'), 'text-slate-600 hover:bg-slate-100' => ! request()->routeIs('admin.kelola-admin.*')])>Admin</a>
-            <a href="{{ route('admin.murid.index') }}" @class(['shrink-0 rounded-lg px-3 py-2 text-sm font-medium', 'bg-indigo-600 text-white' => request()->routeIs('admin.murid.*'), 'text-slate-600 hover:bg-slate-100' => ! request()->routeIs('admin.murid.*')])>Murid</a>
+            <a href="{{ route('admin.users.index') }}" @class(['shrink-0 rounded-lg px-3 py-2 text-sm font-medium', 'bg-indigo-600 text-white' => request()->routeIs('admin.users.*'), 'text-slate-600 hover:bg-slate-100' => ! request()->routeIs('admin.users.*')])>User</a>
         </nav>
 
         <div class="mx-auto flex min-h-[calc(100vh-4.5rem)] max-w-[1600px]">
@@ -40,7 +40,7 @@
                     <a href="{{ route('admin.buku.index') }}" @class(['rounded-xl px-3 py-2.5 text-sm font-medium', 'bg-indigo-600 text-white' => request()->routeIs('admin.buku.*'), 'text-slate-600 hover:bg-slate-100' => ! request()->routeIs('admin.buku.*')])>Kelola Buku</a>
                     <a href="{{ route('admin.status.index') }}" @class(['rounded-xl px-3 py-2.5 text-sm font-medium', 'bg-indigo-600 text-white' => request()->routeIs('admin.status.*'), 'text-slate-600 hover:bg-slate-100' => ! request()->routeIs('admin.status.*')])>Peminjaman</a>
                     <a href="{{ route('admin.kelola-admin.index') }}" @class(['rounded-xl px-3 py-2.5 text-sm font-medium', 'bg-indigo-600 text-white' => request()->routeIs('admin.kelola-admin.*'), 'text-slate-600 hover:bg-slate-100' => ! request()->routeIs('admin.kelola-admin.*')])>Kelola Admin</a>
-                    <a href="{{ route('admin.murid.index') }}" @class(['rounded-xl px-3 py-2.5 text-sm font-medium', 'bg-indigo-600 text-white' => request()->routeIs('admin.murid.*'), 'text-slate-600 hover:bg-slate-100' => ! request()->routeIs('admin.murid.*')])>Kelola Murid</a>
+                    <a href="{{ route('admin.users.index') }}" @class(['rounded-xl px-3 py-2.5 text-sm font-medium', 'bg-indigo-600 text-white' => request()->routeIs('admin.users.*'), 'text-slate-600 hover:bg-slate-100' => ! request()->routeIs('admin.users.*')])>Kelola User</a>
                 </nav>
 
                 <form action="{{ route('admin.logout') }}" method="POST" class="mt-auto border-t border-slate-100 pt-4">

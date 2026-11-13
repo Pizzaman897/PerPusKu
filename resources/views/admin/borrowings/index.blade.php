@@ -15,8 +15,8 @@
                 <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
                     <tr>
                         <th class="px-5 py-4 font-semibold">ID Pinjam</th>
-                        <th class="px-5 py-4 font-semibold">ID Murid</th>
-                        <th class="px-5 py-4 font-semibold">Murid</th>
+                        <th class="px-5 py-4 font-semibold">ID User</th>
+                        <th class="px-5 py-4 font-semibold">User</th>
                         <th class="px-5 py-4 font-semibold">ID Buku</th>
                         <th class="px-5 py-4 font-semibold">Judul buku</th>
                         <th class="px-5 py-4 font-semibold">Tanggal pinjam</th>
@@ -31,8 +31,8 @@
                     @forelse ($borrowings as $borrowing)
                         <tr class="hover:bg-slate-50/70">
                             <td class="whitespace-nowrap px-5 py-4 text-slate-500">#{{ $borrowing['id'] }}</td>
-                            <td class="whitespace-nowrap px-5 py-4 text-slate-500">#{{ $borrowing['student_id'] }}</td>
-                            <td class="whitespace-nowrap px-5 py-4 font-semibold text-slate-800">{{ $borrowing['student'] }}</td>
+                            <td class="whitespace-nowrap px-5 py-4 text-slate-500">#{{ $borrowing['user_id'] }}</td>
+                            <td class="whitespace-nowrap px-5 py-4 font-semibold text-slate-800">{{ $borrowing['user'] }}</td>
                             <td class="whitespace-nowrap px-5 py-4 text-slate-500">#{{ $borrowing['book_id'] }}</td>
                             <td class="px-5 py-4 text-slate-600">{{ $borrowing['book_title'] }}</td>
                             <td class="whitespace-nowrap px-5 py-4 text-slate-600">{{ $borrowing['borrowed_at'] }}</td>
