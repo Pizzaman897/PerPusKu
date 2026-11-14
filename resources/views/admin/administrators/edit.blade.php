@@ -33,6 +33,15 @@
                     <input id="email" name="email" type="email" value="{{ old('email', $admin->email) }}" required class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
                     @error('email')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
+                <div>
+                    <label for="password" class="mb-2 block text-sm font-semibold text-slate-700">Kata sandi baru <span class="font-normal text-slate-500">(opsional)</span></label>
+                    <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" placeholder="Kosongkan jika tidak ingin mengganti">
+                    @error('password')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                </div>
+                <div>
+                    <label for="password_confirmation" class="mb-2 block text-sm font-semibold text-slate-700">Konfirmasi kata sandi baru</label>
+                    <input id="password_confirmation" name="password_confirmation" type="password" autocomplete="new-password" minlength="8" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
+                </div>
                 <div class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
                     <a href="{{ route('admin.kelola-admin.index') }}" class="rounded-xl border border-slate-300 px-5 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50">Batal</a>
                     <button type="submit" class="rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white hover:bg-indigo-700">Simpan perubahan</button>

@@ -31,6 +31,7 @@ Route::get('/login', [AuthController::class, 'login'])
     ->name('login');
 
 Route::post('/login', [AuthController::class, 'authenticate'])
+    ->middleware('throttle:5,1')
     ->name('login.authenticate');
 
 // ============================================================

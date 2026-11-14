@@ -37,8 +37,8 @@
                 </div>
                 <div>
                     <label for="password" class="mb-2 block text-sm font-semibold text-slate-700">Kata sandi awal</label>
-                    <input id="password" name="password" type="password" autocomplete="new-password" required class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
-                    <p class="mt-1 text-xs text-slate-500">Kata sandi akan digunakan user untuk masuk.</p>
+                    <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
+                    <p class="mt-1 text-xs text-slate-500">Gunakan minimal 8 karakter; kata sandi ini dipakai user untuk masuk.</p>
                     @error('password')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
                 <div>

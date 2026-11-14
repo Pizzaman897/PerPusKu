@@ -9,8 +9,7 @@
             <div class="mb-7">
                 <p class="text-sm font-semibold text-indigo-600">Akses aplikasi</p>
                 <h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-900">Tambah admin</h1>
-                <p class="mt-2 text-sm text-slate-500">Masukkan nama dan email akun admin baru.</p>
-                <p class="mt-2 text-sm text-slate-500">Kata sandi dibuat otomatis dan hanya ditampilkan sekali setelah akun dibuat.</p>
+                <p class="mt-2 text-sm text-slate-500">Masukkan nama, email, dan kata sandi akun admin baru.</p>
             </div>
             @if ($errors->any())
                 <div role="alert" class="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -32,6 +31,15 @@
                     <label for="email" class="mb-2 block text-sm font-semibold text-slate-700">Email</label>
                     <input id="email" name="email" type="email" value="{{ old('email') }}" required class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" placeholder="nama@email.com">
                     @error('email')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                </div>
+                <div>
+                    <label for="password" class="mb-2 block text-sm font-semibold text-slate-700">Kata sandi</label>
+                    <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
+                    @error('password')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                </div>
+                <div>
+                    <label for="password_confirmation" class="mb-2 block text-sm font-semibold text-slate-700">Konfirmasi kata sandi</label>
+                    <input id="password_confirmation" name="password_confirmation" type="password" autocomplete="new-password" minlength="8" required class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
                 </div>
                 <div class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
                     <a href="{{ route('admin.kelola-admin.index') }}" class="rounded-xl border border-slate-300 px-5 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50">Batal</a>

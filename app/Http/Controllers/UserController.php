@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -25,9 +26,19 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(Request $request): string
+    public function store(Request $request): RedirectResponse
     {
-        return 'Melakukan penambahan data user';
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        User::create($validated);
+
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'User berhasil ditambahkan.');
     }
 
     public function show(User $user): View
@@ -46,9 +57,26 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request, string $id): string
+    public function update(Request $request, User $user): RedirectResponse
     {
-        return "Melakukan perubahan data user dengan ID: {$id}";
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => [
+                'required', 'string', 'email', 'max:255',
+                Rule::unique('users', 'email')->ignore($user->id),
+            ],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        if (blank($validated['password'] ?? null)) {
+            unset($validated['password']);
+        }
+
+        $user->update($validated);
+
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'User berhasil diperbarui.');
     }
 
     public function destroy(User $user): RedirectResponse

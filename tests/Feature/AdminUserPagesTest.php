@@ -4,6 +4,8 @@ use App\Models\Buku;
 use App\Models\Peminjaman;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 uses(RefreshDatabase::class);
 
@@ -117,4 +119,46 @@ it('keeps a user who has borrowing history', function () {
 
     $this->get(route('admin.users.index'))
         ->assertSee('User tidak dapat dihapus karena masih memiliki riwayat peminjaman.');
+});
+
+it('creates a user and stores the submitted password securely', function () {
+    $this->post(route('admin.users.store'), [
+        'name' => 'Budi Santoso',
+        'email' => 'budi.santoso@example.com',
+        'password' => 'User-Password-2026',
+        'password_confirmation' => 'User-Password-2026',
+    ])->assertRedirect(route('admin.users.index'))
+        ->assertSessionHas('success', 'User berhasil ditambahkan.');
+
+    $user = User::where('email', 'budi.santoso@example.com')->firstOrFail();
+
+    expect(Hash::check('User-Password-2026', $user->password))->toBeTrue();
+});
+
+it('updates a user password when a new one is provided', function () {
+    $user = User::factory()->create();
+
+    $this->put(route('admin.users.update', $user), [
+        'name' => $user->name,
+        'email' => $user->email,
+        'password' => 'Updated-User-Password-2026',
+        'password_confirmation' => 'Updated-User-Password-2026',
+    ])->assertRedirect(route('admin.users.index'))
+        ->assertSessionHas('success', 'User berhasil diperbarui.');
+
+    expect(Hash::check('Updated-User-Password-2026', $user->refresh()->password))->toBeTrue();
+});
+
+it('authenticates a user with the saved email and password', function () {
+    $user = User::factory()->create([
+        'email' => 'user.login@example.com',
+        'password' => 'User-Login-Password-2026',
+    ]);
+
+    $this->post(route('login.authenticate'), [
+        'email' => 'user.login@example.com',
+        'password' => 'User-Login-Password-2026',
+    ])->assertRedirect(route('user.dashboard'));
+
+    expect(Auth::guard('web')->user()->is($user))->toBeTrue();
 });

@@ -38,7 +38,7 @@
                 </div>
                 <div>
                     <label for="password" class="mb-2 block text-sm font-semibold text-slate-700">Kata sandi baru <span class="font-normal text-slate-500">(opsional)</span></label>
-                    <input id="password" name="password" type="password" autocomplete="new-password" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" placeholder="Kosongkan jika tidak ingin mengganti">
+                    <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" placeholder="Kosongkan jika tidak ingin mengganti">
                     @error('password')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
                 <div>
