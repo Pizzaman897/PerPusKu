@@ -5,7 +5,7 @@
 @section('content')
     <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-            <p class="text-sm font-semibold text-indigo-600">Perpustakaan digital sekolah</p>
+            <p class="text-sm font-semibold text-indigo-600">Perpustakaan digital</p>
             <h1 class="mt-1 text-3xl font-bold tracking-tight text-slate-900">Jelajahi Buku</h1>
             <p class="mt-2 text-sm text-slate-500">Temukan bacaan berikutnya dari koleksi perpustakaan.</p>
         </div>
