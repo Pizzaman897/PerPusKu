@@ -18,7 +18,7 @@ Route::get('/', [LandingController::class, 'index'])
 
 Route::get('/landing', [LandingController::class, 'index'])
     ->name('landing');
-
+    
 // Login
 Route::get('/login', [AuthController::class, 'login'])
     ->name('login');
