@@ -20,9 +20,15 @@
             </a>
 
             <ul class="hidden md:flex items-center gap-10 font-medium text-gray-800">
-                <li><a href="#beranda" class="hover:text-indigo-600">Beranda</a></li>
-                <li><a href="#tentang" class="hover:text-indigo-600">Tentang</a></li>
-                <li><a href="#kontak" class="hover:text-indigo-600">Kontak</a></li>
+                <li class="transition-transform duration-300 hover:scale-110">
+                    <a href="#beranda" class="inline-block transition-all duration-300 hover:text-indigo-600 hover:scale-110">Beranda</a>
+                </li>
+                <li class="transition-transform duration-300 hover:scale-110">
+                    <a href="#tentang" class="inline-block transition-all duration-300 hover:text-indigo-600 hover:scale-110">Tentang</a>
+                </li>
+                <li class="transition-transform duration-300 hover:scale-110">
+                    <a href="#kontak" class="inline-block transition-all duration-300 hover:text-indigo-600 hover:scale-110">Kontak</a>
+                </li>
             </ul>
 
             <div class="flex items-center gap-3">
@@ -46,7 +52,7 @@
                     Meminjam dan mengelola buku jadi lebih mudah, cepat, dan teratur
                 </p>
                 <a href="#tentang"
-                   class="inline-block px-6 py-3 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700">
+                   class="inline-block px-6 py-3 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 ">
                     Jelajahi Buku
                 </a>
             </div>
@@ -73,7 +79,7 @@
             @endphp
 
             @foreach ($features as $f)
-                <div class="bg-[#F5F6FC] rounded-2xl p-8 text-center shadow-sm">
+                <div class="bg-[#F5F6FC] rounded-2xl p-8 text-center shadow-sm transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-105">
                     <img src="{{ asset('images/' . $f['icon']) }}" alt="{{ $f['title'] }}" class="w-10 h-10 mx-auto mb-4">
                     <h3 class="font-semibold text-gray-900 mb-2">{{ $f['title'] }}</h3>
                     <p class="text-sm text-gray-500">{{ $f['desc'] }}</p>
