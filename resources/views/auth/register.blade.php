@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - PERPUSKU</title>
+    <title>Register - PERPUSKU</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#eef0fb] min-h-screen flex items-center justify-center p-6">
@@ -35,15 +35,16 @@
             <form method="POST" action="{{ route('register.store') }}" class="space-y-4">
                 @csrf
 
-                {{-- Username --}}
+                {{-- Nama --}}
                 <div class="relative">
                     <span class="absolute inset-y-0 left-3 flex items-center text-gray-400">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                     </span>
-                    <input type="text" name="username" value="{{ old('username') }}"
-                        placeholder="Username"
+                    <input type="text" name="name" value="{{ old('name') }}"
+                        placeholder="Nama lengkap"
+                        autocomplete="name"
                         class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white"
                         required autofocus>
                 </div>
@@ -58,7 +59,8 @@
                     <input type="email" name="email" value="{{ old('email') }}"
                         placeholder="Email"
                         class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white"
-                        required autofocus>
+                        autocomplete="email"
+                        required>
                 </div>
 
                 {{-- Password --}}
@@ -70,6 +72,7 @@
                     </span>
                     <input type="password" name="password"
                         placeholder="Password"
+                        autocomplete="new-password"
                         class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white"
                         required>
                 </div>
@@ -81,19 +84,11 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 10-8 0v4h8z" />
                         </svg>
                     </span>
-                    <input type="confirm_password" name="confirm_password"
+                    <input type="password" name="password_confirmation"
                         placeholder="Confirm Password"
+                        autocomplete="new-password"
                         class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white"
                         required>
-                </div>
-
-                {{-- Ingat saya & Lupa password --}}
-                <div class="flex items-center justify-between text-sm">
-                    <label class="flex items-center gap-2 text-gray-500">
-                        <input type="checkbox" name="remember" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                        Ingat saya
-                    </label>
-                    <a href="{{ Route::has('password.request') ? route('password.request') : '#' }}" class="text-indigo-600 font-medium hover:underline">Lupa Password?</a>
                 </div>
 
                 {{-- Tombol Daftar --}}

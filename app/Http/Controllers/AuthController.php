@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterUserRequest;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,6 +24,17 @@ class AuthController extends Controller
         return view('auth.login', [
             'title' => 'PerPusKu - Login',
         ]);
+    }
+
+    public function store(RegisterUserRequest $request): RedirectResponse
+    {
+        $user = User::create($request->validated());
+
+        Auth::guard('admin')->logout();
+        Auth::guard('web')->login($user);
+        $request->session()->regenerate();
+
+        return redirect()->route('user.dashboard');
     }
 
     public function authenticate(Request $request): RedirectResponse
