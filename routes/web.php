@@ -76,6 +76,7 @@ Route::prefix('user')
 
 Route::prefix('admin')
     ->name('admin.')
+    ->middleware('auth:admin')
     ->group(function () {
 
         // Dashboard
@@ -113,11 +114,9 @@ Route::prefix('admin')
         // ----------------------------------------------------
 
         Route::get('/status', [BorrowingController::class, 'index'])
-            ->middleware('auth:admin')
             ->name('status.index');
 
         Route::put('/status/{peminjaman}', [BorrowingController::class, 'update'])
-            ->middleware('auth:admin')
             ->name('status.update');
 
         // ----------------------------------------------------

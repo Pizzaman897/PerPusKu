@@ -8,6 +8,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 it('shows live database totals for books, users, and admins', function () {
+    $this->actingAs(new Admin(['name' => 'Admin Test']), 'admin');
+
     User::factory()->count(3)->create();
 
     foreach (range(1, 4) as $number) {

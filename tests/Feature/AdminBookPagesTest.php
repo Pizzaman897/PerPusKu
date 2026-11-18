@@ -1,11 +1,16 @@
 <?php
 
+use App\Models\Admin;
 use App\Models\Buku;
 use App\Models\Peminjaman;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
+
+beforeEach(function () {
+    $this->actingAs(new Admin(['name' => 'Admin Test']), 'admin');
+});
 
 it('renders book details with the shared admin layout', function () {
     $book = Buku::create([

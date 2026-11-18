@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 uses(RefreshDatabase::class);
 
 it('shows password fields when creating and editing an admin', function () {
+    $this->actingAs(new Admin(['name' => 'Admin Test']), 'admin');
+
     $admin = Admin::create([
         'name' => 'Admin Form',
         'email' => 'admin.form@example.com',
@@ -24,6 +26,8 @@ it('shows password fields when creating and editing an admin', function () {
 });
 
 it('creates an admin with a usable password', function () {
+    $this->actingAs(new Admin(['name' => 'Admin Test']), 'admin');
+
     $this->post(route('admin.kelola-admin.store'), [
         'name' => 'Admin Baru',
         'email' => 'admin.baru@example.com',
@@ -37,6 +41,8 @@ it('creates an admin with a usable password', function () {
 });
 
 it('updates an admin password when a new one is provided', function () {
+    $this->actingAs(new Admin(['name' => 'Admin Test']), 'admin');
+
     $admin = Admin::create([
         'name' => 'Admin Lama',
         'email' => 'admin.lama@example.com',
@@ -54,6 +60,8 @@ it('updates an admin password when a new one is provided', function () {
 });
 
 it('keeps an admin password when the edit password is left blank', function () {
+    $this->actingAs(new Admin(['name' => 'Admin Test']), 'admin');
+
     $admin = Admin::create([
         'name' => 'Admin Tetap',
         'email' => 'admin.tetap@example.com',

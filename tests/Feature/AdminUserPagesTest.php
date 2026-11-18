@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Admin;
 use App\Models\Buku;
 use App\Models\Peminjaman;
 use App\Models\User;
@@ -8,6 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 uses(RefreshDatabase::class);
+
+beforeEach(function () {
+    $this->actingAs(new Admin(['name' => 'Admin Test']), 'admin');
+});
 
 it('renders persisted users with delete actions', function () {
     $andi = User::factory()->create([
