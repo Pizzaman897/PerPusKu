@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Buku;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class BookController extends Controller
@@ -26,6 +27,7 @@ class BookController extends Controller
     {
         return view('admin.books.create', [
             'title' => 'PerPusKu - Tambah Buku',
+            'categories' => Buku::CATEGORIES,
         ]);
     }
 
@@ -33,7 +35,7 @@ class BookController extends Controller
     {
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'category' => ['required', 'string', 'max:255'],
+            'category' => ['required', 'string', Rule::in(Buku::CATEGORIES)],
             'description' => ['nullable', 'string'],
             'image_url' => ['nullable', 'url', 'max:255'],
         ]);
@@ -64,6 +66,7 @@ class BookController extends Controller
         return view('admin.books.edit', [
             'title' => 'PerPusKu - Edit Buku',
             'buku' => $buku,
+            'categories' => Buku::CATEGORIES,
         ]);
     }
 
@@ -71,7 +74,7 @@ class BookController extends Controller
     {
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'category' => ['required', 'string', 'max:255'],
+            'category' => ['required', 'string', Rule::in(Buku::CATEGORIES)],
             'description' => ['nullable', 'string'],
             'image_url' => ['nullable', 'url', 'max:255'],
         ]);

@@ -9,13 +9,16 @@
             <h1 class="mt-1 text-3xl font-bold tracking-tight text-slate-900">Jelajahi Buku</h1>
             <p class="mt-2 text-sm text-slate-500">Temukan bacaan berikutnya dari koleksi perpustakaan.</p>
         </div>
-        <label class="sr-only" for="category">Filter kategori</label>
-        <select id="category" class="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-100">
-            <option>Semua Kategori</option>
-            <option>Pelajaran</option>
-            <option>Fiksi</option>
-            <option>Non-Fiksi</option>
-        </select>
+        <form method="GET" action="{{ route('user.dashboard') }}" class="flex w-full gap-2 sm:w-auto">
+            <label class="sr-only" for="category">Filter kategori</label>
+            <select id="category" name="category" class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-100 sm:flex-none">
+                <option value="">Semua Kategori</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category }}" @selected($selectedCategory === $category)>{{ $category }}</option>
+                @endforeach
+            </select>
+            <button type="submit" class="rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700">Filter</button>
+        </form>
     </div>
 
     <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
@@ -32,7 +35,12 @@
                 </div>
             </a>
         @empty
-            <p class="col-span-full rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center text-slate-500">Belum ada buku dalam koleksi.</p>
+            <div class="col-span-full rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center text-slate-500">
+                <p>{{ $selectedCategory ? 'Belum ada buku dalam kategori ini.' : 'Belum ada buku dalam koleksi.' }}</p>
+                @if ($selectedCategory)
+                    <a href="{{ route('user.dashboard') }}" class="mt-2 inline-block font-semibold text-indigo-600 hover:text-indigo-800">Tampilkan semua buku</a>
+                @endif
+            </div>
         @endforelse
     </div>
 @endsection

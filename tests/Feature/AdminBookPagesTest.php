@@ -38,13 +38,19 @@ it('shows book identifiers in the collection list and keeps availability derived
 
     $this->get(route('admin.buku.create'))
         ->assertSee('Status awal buku otomatis')
+        ->assertSee('value="Pelajaran"', false)
+        ->assertSee('value="Novel"', false)
+        ->assertSee('value="Komik"', false)
+        ->assertSee('value="Kamus"', false)
+        ->assertSee('value="Biografi"', false)
+        ->assertDontSee('value="Fiksi"', false)
         ->assertDontSee('name="status"', false);
 });
 
 it('creates a book with the submitted details', function () {
     $this->post(route('admin.buku.store'), [
         'title' => 'Petualangan Baru',
-        'category' => 'Fiksi',
+        'category' => 'Novel',
         'description' => 'Cerita untuk pembaca muda.',
         'image_url' => 'https://example.com/sampul.jpg',
     ])
@@ -53,7 +59,7 @@ it('creates a book with the submitted details', function () {
 
     $this->assertDatabaseHas('buku', [
         'judul' => 'Petualangan Baru',
-        'kategori' => 'Fiksi',
+        'kategori' => 'Novel',
         'deskripsi' => 'Cerita untuk pembaca muda.',
         'url_sampul' => 'https://example.com/sampul.jpg',
     ]);
@@ -67,6 +73,18 @@ it('returns validation errors when required book details are missing', function 
         ])
         ->assertRedirect(route('admin.buku.create'))
         ->assertSessionHasErrors(['title', 'category']);
+
+    $this->assertDatabaseCount('buku', 0);
+});
+
+it('rejects unsupported categories when creating books', function () {
+    $this->from(route('admin.buku.create'))
+        ->post(route('admin.buku.store'), [
+            'title' => 'Buku Kategori Lama',
+            'category' => 'Fiksi',
+        ])
+        ->assertRedirect(route('admin.buku.create'))
+        ->assertSessionHasErrors('category');
 
     $this->assertDatabaseCount('buku', 0);
 });
@@ -86,7 +104,7 @@ it('prefills the edit form and updates the selected book', function () {
 
     $this->put(route('admin.buku.update', $book), [
         'title' => 'Judul Baru',
-        'category' => 'Non-fiksi',
+        'category' => 'Kamus',
         'description' => 'Deskripsi baru.',
         'image_url' => 'https://example.com/buku-baru.jpg',
     ])
@@ -96,10 +114,45 @@ it('prefills the edit form and updates the selected book', function () {
     $this->assertDatabaseHas('buku', [
         'id' => $book->id,
         'judul' => 'Judul Baru',
-        'kategori' => 'Non-fiksi',
+        'kategori' => 'Kamus',
         'deskripsi' => 'Deskripsi baru.',
         'url_sampul' => 'https://example.com/buku-baru.jpg',
     ]);
+});
+
+it('asks for a supported category when editing a book with an old category', function () {
+    $book = Buku::create([
+        'judul' => 'Buku Kategori Lama',
+        'kategori' => 'Fiksi',
+    ]);
+
+    $this->get(route('admin.buku.edit', $book))
+        ->assertSee('value="" disabled selected', false)
+        ->assertSee('Kategori buku ini belum termasuk pilihan yang tersedia.')
+        ->assertDontSee('value="Pelajaran" selected', false);
+});
+
+it('keeps the existing category when an unsupported category is submitted', function () {
+    $book = Buku::create([
+        'judul' => 'Buku Referensi',
+        'kategori' => 'Pelajaran',
+    ]);
+
+    $this->from(route('admin.buku.edit', $book))
+        ->put(route('admin.buku.update', $book), [
+            'title' => $book->judul,
+            'category' => 'Non-fiksi',
+        ])
+        ->assertRedirect(route('admin.buku.edit', $book))
+        ->assertSessionHasErrors('category');
+
+    $this->assertDatabaseHas('buku', [
+        'id' => $book->id,
+        'kategori' => 'Pelajaran',
+    ]);
+
+    $this->get(route('admin.buku.edit', $book))
+        ->assertSee('value="Pelajaran" selected', false);
 });
 
 it('returns not found when a requested book does not exist', function () {

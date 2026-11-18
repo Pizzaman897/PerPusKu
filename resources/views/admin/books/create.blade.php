@@ -32,7 +32,12 @@
                 </div>
                 <div>
                     <label for="category" class="mb-2 block text-sm font-semibold text-slate-700">Kategori</label>
-                    <input id="category" name="category" type="text" value="{{ old('category') }}" required class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" placeholder="Contoh: Fiksi, Non-fiksi, Pelajaran">
+                    <select id="category" name="category" required class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
+                        <option value="" disabled @selected(! in_array(old('category'), $categories, true))>Pilih kategori</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category }}" @selected(old('category') === $category)>{{ $category }}</option>
+                        @endforeach
+                    </select>
                     @error('category')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
                 <div>

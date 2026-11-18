@@ -47,10 +47,12 @@ it('shows borrowing records with editable status and deadline controls', functio
         ->assertSee('Lewat batas waktu')
         ->assertSee('Dikembalikan')
         ->assertSee('name="status"', false)
+        ->assertSee('value="dikembalikan"', false)
+        ->assertSee('value="terlambat"', false)
         ->assertSee('name="batas_pengembalian"', false);
 });
 
-it('hides status and deadline controls after a borrowing is approved', function () {
+it('allows an approved borrowing to be marked returned or late without editing its deadline', function () {
     $admin = new Admin(['name' => 'Admin']);
     $user = User::factory()->create();
     $book = Buku::create([
@@ -68,7 +70,9 @@ it('hides status and deadline controls after a borrowing is approved', function 
 
     $this->actingAs($admin, 'admin')
         ->get(route('admin.status.index'))
-        ->assertDontSee('name="status"', false)
+        ->assertSee('name="status"', false)
+        ->assertSee('value="dikembalikan"', false)
+        ->assertSee('value="terlambat"', false)
         ->assertDontSee('name="batas_pengembalian"', false);
 });
 

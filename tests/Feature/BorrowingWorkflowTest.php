@@ -102,7 +102,7 @@ it('requires an admin to set a deadline before approving a borrowing', function 
         'batas_pengembalian' => '2026-11-30T10:00',
     ])
         ->assertRedirect()
-        ->assertSessionHas('error', 'Status peminjaman sudah ditetapkan dan tidak dapat diubah lagi.');
+        ->assertSessionHas('error', 'Peminjaman yang sedang berlangsung tidak dapat dikembalikan ke status Pending.');
 
     $this->assertDatabaseHas('peminjaman', [
         'id' => $borrowing->id,
@@ -163,11 +163,79 @@ it('does not allow a regular user to change admin borrowing status', function ()
     ]);
 });
 
-it('marks a book returned when the user returns it by the deadline', function () {
+it('does not allow the admin to change a deadline after approving a borrowing', function () {
     $this->travelTo('2026-11-19 10:00:00');
+    $admin = new Admin(['name' => 'Admin']);
     $user = User::factory()->create();
     $book = Buku::create([
-        'judul' => 'Buku tepat waktu',
+        'judul' => 'Batas sudah ditetapkan',
+        'kategori' => 'Fiksi',
+    ]);
+    $borrowing = Peminjaman::create([
+        'user_id' => $user->id,
+        'buku_id' => $book->id,
+        'dipinjam_pada' => now()->subDay(),
+        'batas_pengembalian' => '2026-11-25 10:00:00',
+        'status' => 'dipinjam',
+    ]);
+
+    $this->actingAs($admin, 'admin')
+        ->put(route('admin.status.update', $borrowing), [
+            'batas_pengembalian' => '2026-11-27T10:00',
+        ])
+        ->assertSessionHas('error', 'Batas pengembalian hanya dapat diubah saat status masih Pending.');
+
+    $this->assertDatabaseHas('peminjaman', [
+        'id' => $borrowing->id,
+        'batas_pengembalian' => '2026-11-25 10:00:00',
+    ]);
+});
+
+it('shows only active borrowings on the status page and completed ones in history', function () {
+    $user = User::factory()->create();
+    $activeBook = Buku::create([
+        'judul' => 'Buku masih dipinjam',
+        'kategori' => 'Fiksi',
+    ]);
+    $returnedBook = Buku::create([
+        'judul' => 'Buku sudah kembali',
+        'kategori' => 'Fiksi',
+    ]);
+
+    Peminjaman::create([
+        'user_id' => $user->id,
+        'buku_id' => $activeBook->id,
+        'dipinjam_pada' => now(),
+        'batas_pengembalian' => now()->addDays(7),
+        'status' => 'dipinjam',
+    ]);
+    Peminjaman::create([
+        'user_id' => $user->id,
+        'buku_id' => $returnedBook->id,
+        'dipinjam_pada' => now()->subDays(7),
+        'batas_pengembalian' => now()->subDay(),
+        'dikembalikan_pada' => now(),
+        'status' => 'terlambat',
+    ]);
+
+    $this->actingAs($user, 'web')
+        ->get(route('user.status'))
+        ->assertSee($activeBook->judul)
+        ->assertDontSee($returnedBook->judul)
+        ->assertDontSee('Kembalikan buku');
+
+    $this->get(route('user.history'))
+        ->assertSee($returnedBook->judul)
+        ->assertSee('Terlambat')
+        ->assertDontSee($activeBook->judul);
+});
+
+it('lets the admin set a final return status and moves the book to history', function (string $status, string $label) {
+    $this->travelTo('2026-11-19 10:00:00');
+    $admin = new Admin(['name' => 'Admin']);
+    $user = User::factory()->create();
+    $book = Buku::create([
+        'judul' => 'Buku selesai dikelola admin',
         'kategori' => 'Fiksi',
     ]);
     $borrowing = Peminjaman::create([
@@ -178,62 +246,53 @@ it('marks a book returned when the user returns it by the deadline', function ()
         'status' => 'dipinjam',
     ]);
 
-    $this->actingAs($user, 'web')
-        ->post(route('user.book.kembalikan', $borrowing))
-        ->assertRedirect(route('user.status'))
-        ->assertSessionHas('success', 'Buku berhasil dikembalikan.');
+    $this->actingAs($admin, 'admin')
+        ->put(route('admin.status.update', $borrowing), ['status' => $status])
+        ->assertRedirect()
+        ->assertSessionHas('success', 'Data peminjaman berhasil diperbarui.');
 
     $this->assertDatabaseHas('peminjaman', [
         'id' => $borrowing->id,
-        'status' => 'dikembalikan',
+        'status' => $status,
         'dikembalikan_pada' => '2026-11-19 10:00:00',
     ]);
-});
 
-it('marks a book returned late when the user returns it after the deadline', function () {
-    $this->travelTo('2026-11-21 10:00:00');
+    $this->actingAs($user, 'web')
+        ->get(route('user.status'))
+        ->assertDontSee($book->judul);
+
+    $this->get(route('user.history'))
+        ->assertSee($book->judul)
+        ->assertSee($label);
+
+    $this->actingAs($admin, 'admin')
+        ->put(route('admin.status.update', $borrowing), ['status' => 'dipinjam'])
+        ->assertSessionHas('error', 'Status peminjaman sudah ditetapkan dan tidak dapat diubah lagi.');
+
+    $this->assertDatabaseHas('peminjaman', [
+        'id' => $borrowing->id,
+        'status' => $status,
+    ]);
+})->with([
+    'returned' => ['dikembalikan', 'Dikembalikan'],
+    'late' => ['terlambat', 'Terlambat'],
+]);
+
+it('does not expose a user return action or endpoint', function () {
     $user = User::factory()->create();
     $book = Buku::create([
-        'judul' => 'Buku terlambat',
+        'judul' => 'Buku milik user',
         'kategori' => 'Fiksi',
     ]);
     $borrowing = Peminjaman::create([
         'user_id' => $user->id,
-        'buku_id' => $book->id,
-        'dipinjam_pada' => '2026-11-18 10:00:00',
-        'batas_pengembalian' => '2026-11-20 10:00:00',
-        'status' => 'dipinjam',
-    ]);
-
-    $this->actingAs($user, 'web')
-        ->post(route('user.book.kembalikan', $borrowing))
-        ->assertRedirect(route('user.status'));
-
-    $this->assertDatabaseHas('peminjaman', [
-        'id' => $borrowing->id,
-        'status' => 'terlambat',
-        'dikembalikan_pada' => '2026-11-21 10:00:00',
-    ]);
-});
-
-it('does not allow a user to return another user borrowing', function () {
-    $owner = User::factory()->create();
-    $otherUser = User::factory()->create();
-    $book = Buku::create([
-        'judul' => 'Buku milik user lain',
-        'kategori' => 'Fiksi',
-    ]);
-    $borrowing = Peminjaman::create([
-        'user_id' => $owner->id,
         'buku_id' => $book->id,
         'dipinjam_pada' => now(),
         'batas_pengembalian' => now()->addDays(7),
         'status' => 'dipinjam',
     ]);
 
-    $this->actingAs($otherUser, 'web')
-        ->post(route('user.book.kembalikan', $borrowing))
+    $this->actingAs($user, 'web')
+        ->post('/user/peminjaman/'.$borrowing->id.'/kembalikan')
         ->assertNotFound();
-
-    $this->assertModelExists($borrowing);
 });

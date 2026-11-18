@@ -7,6 +7,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="min-h-screen bg-slate-50 text-slate-900">
+        @php($admin = auth('admin')->user())
         <header class="flex h-18 items-center justify-between border-b border-slate-200 bg-white px-4 sm:px-8">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
                 <img src="{{ asset('images/logo-perpusku.png') }}" alt="" class="h-9 w-auto">
@@ -16,10 +17,10 @@
             <div class="flex items-center gap-3">
                 <div class="hidden text-right sm:block">
                     <p class="text-xs text-slate-500">Masuk sebagai</p>
-                    <p class="text-sm font-semibold text-slate-800">{{ auth()->user()->name ?? 'Admin' }}</p>
+                    <p class="text-sm font-semibold text-slate-800">{{ $admin?->name ?? 'Admin' }}</p>
                 </div>
                 <span class="grid size-10 place-items-center rounded-full bg-indigo-100 font-bold text-indigo-700">
-                    {{ mb_substr(auth()->user()->name ?? 'A', 0, 1) }}
+                    {{ mb_substr($admin?->name ?? 'A', 0, 1) }}
                 </span>
             </div>
         </header>

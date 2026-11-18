@@ -60,11 +60,6 @@ Route::prefix('user')
             ->middleware('auth:web')
             ->name('status');
 
-        // Proses Kembalikan Buku
-        Route::post('/peminjaman/{peminjaman}/kembalikan', [UserStatusController::class, 'kembalikan'])
-            ->middleware('auth:web')
-            ->name('book.kembalikan');
-
         // History Peminjaman
         Route::get('/history', [UserHistoryController::class, 'index'])
             ->middleware('auth:web')

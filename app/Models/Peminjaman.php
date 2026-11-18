@@ -39,6 +39,10 @@ class Peminjaman extends Model
 
     public function statusEfektif(): string
     {
+        if (in_array($this->status, ['dikembalikan', 'terlambat'], true)) {
+            return $this->status;
+        }
+
         if ($this->dikembalikan_pada !== null) {
             return $this->batas_pengembalian !== null
                 && $this->dikembalikan_pada->greaterThan($this->batas_pengembalian)

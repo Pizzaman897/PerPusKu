@@ -33,7 +33,21 @@
                 </div>
                 <div>
                     <label for="category" class="mb-2 block text-sm font-semibold text-slate-700">Kategori</label>
-                    <input id="category" name="category" type="text" value="{{ old('category', $buku->kategori) }}" required class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
+                    @php
+                        $oldCategory = old('category');
+                        $currentCategory = is_string($oldCategory) && in_array($oldCategory, $categories, true)
+                            ? $oldCategory
+                            : (in_array($buku->kategori, $categories, true) ? $buku->kategori : null);
+                    @endphp
+                    <select id="category" name="category" required class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
+                        <option value="" disabled @selected($currentCategory === null)>Pilih kategori</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category }}" @selected($currentCategory === $category)>{{ $category }}</option>
+                        @endforeach
+                    </select>
+                    @if (! in_array($buku->kategori, $categories, true))
+                        <p class="mt-1 text-sm text-amber-700">Kategori buku ini belum termasuk pilihan yang tersedia. Pilih kategori baru sebelum menyimpan.</p>
+                    @endif
                     @error('category')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
                 <div>

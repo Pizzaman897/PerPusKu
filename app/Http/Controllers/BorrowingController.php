@@ -22,11 +22,19 @@ class BorrowingController extends Controller
 
     public function update(UpdateBorrowingRequest $request, Peminjaman $peminjaman): RedirectResponse
     {
-        if ($peminjaman->status !== 'pending') {
+        if (! in_array($peminjaman->status, ['pending', 'dipinjam'], true)) {
             return back()->with('error', 'Status peminjaman sudah ditetapkan dan tidak dapat diubah lagi.');
         }
 
         $validated = $request->validated();
+
+        if ($peminjaman->status === 'dipinjam' && ($validated['status'] ?? null) === 'pending') {
+            return back()->with('error', 'Peminjaman yang sedang berlangsung tidak dapat dikembalikan ke status Pending.');
+        }
+
+        if (isset($validated['batas_pengembalian']) && $peminjaman->status !== 'pending') {
+            return back()->with('error', 'Batas pengembalian hanya dapat diubah saat status masih Pending.');
+        }
 
         if ($validated === []) {
             return back()->with('error', 'Pilih status atau atur batas pengembalian terlebih dahulu.');
@@ -36,6 +44,10 @@ class BorrowingController extends Controller
             && ! isset($validated['batas_pengembalian'])
             && $peminjaman->batas_pengembalian === null) {
             return back()->with('error', 'Atur batas pengembalian sebelum menyetujui peminjaman.');
+        }
+
+        if (in_array($validated['status'] ?? null, ['dikembalikan', 'terlambat'], true)) {
+            $validated['dikembalikan_pada'] = now();
         }
 
         $peminjaman->fill($validated)->save();

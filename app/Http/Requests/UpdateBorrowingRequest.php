@@ -24,7 +24,7 @@ class UpdateBorrowingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => ['sometimes', 'required', Rule::in(['pending', 'dipinjam'])],
+            'status' => ['sometimes', 'required', Rule::in(['pending', 'dipinjam', 'dikembalikan', 'terlambat'])],
             'batas_pengembalian' => ['sometimes', 'required', 'date', 'after:now'],
         ];
     }

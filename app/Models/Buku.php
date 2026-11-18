@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Table('buku')]
 class Buku extends Model
 {
+    public const CATEGORIES = ['Pelajaran', 'Novel', 'Komik', 'Kamus', 'Biografi'];
+
     public function peminjaman(): HasMany
     {
         return $this->hasMany(Peminjaman::class, 'buku_id');

@@ -6,7 +6,7 @@
     <div class="mb-8">
         <p class="text-sm font-semibold text-indigo-600">Aktivitas Anda</p>
         <h1 class="mt-1 text-3xl font-bold tracking-tight text-slate-900">Peminjaman Saya</h1>
-        <p class="mt-2 text-sm text-slate-500">Pantau status permintaan dan batas pengembalian buku.</p>
+        <p class="mt-2 text-sm text-slate-500">Pantau permintaan dan buku yang masih dipinjam. Admin akan memperbarui status pengembalian.</p>
     </div>
 
     @if (session('success'))
@@ -66,12 +66,6 @@
                                 </div>
                             @endif
                         </dl>
-                        @if (in_array($status, ['dipinjam', 'lewat_batas_waktu'], true))
-                            <form method="POST" action="{{ route('user.book.kembalikan', $item) }}" class="mt-6">
-                                @csrf
-                                <button type="submit" class="w-fit rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700">Kembalikan buku</button>
-                            </form>
-                        @endif
                     </div>
                 </div>
             </article>
