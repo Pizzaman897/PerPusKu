@@ -47,23 +47,27 @@ Route::prefix('user')
             ->name('dashboard');
 
         // Detail Buku
-        Route::get('/buku/{id}', [BookDetailController::class, 'show'])
+        Route::get('/buku/{buku}', [BookDetailController::class, 'show'])
             ->name('book.show');
 
         // Proses Pinjam Buku
-        Route::post('/buku/{id}/pinjam', [BookDetailController::class, 'pinjam'])
+        Route::post('/buku/{buku}/pinjam', [BookDetailController::class, 'pinjam'])
+            ->middleware('auth:web')
             ->name('book.pinjam');
 
         // Status Peminjaman
         Route::get('/status', [UserStatusController::class, 'index'])
+            ->middleware('auth:web')
             ->name('status');
 
         // Proses Kembalikan Buku
-        Route::post('/buku/{id}/kembalikan', [UserStatusController::class, 'kembalikan'])
+        Route::post('/peminjaman/{peminjaman}/kembalikan', [UserStatusController::class, 'kembalikan'])
+            ->middleware('auth:web')
             ->name('book.kembalikan');
 
         // History Peminjaman
         Route::get('/history', [UserHistoryController::class, 'index'])
+            ->middleware('auth:web')
             ->name('history');
 
         // Logout
@@ -114,9 +118,11 @@ Route::prefix('admin')
         // ----------------------------------------------------
 
         Route::get('/status', [BorrowingController::class, 'index'])
+            ->middleware('auth:admin')
             ->name('status.index');
 
-        Route::put('/status/{id}', [BorrowingController::class, 'update'])
+        Route::put('/status/{peminjaman}', [BorrowingController::class, 'update'])
+            ->middleware('auth:admin')
             ->name('status.update');
 
         // ----------------------------------------------------

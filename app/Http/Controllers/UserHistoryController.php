@@ -2,38 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class UserHistoryController extends Controller
 {
-    public function index(Request $request)
+    public function index(): View
     {
-        $title = 'PerPusKu - Riwayat Peminjaman';
-
-        // Data contoh. Nanti ganti dengan query dari database/model Peminjaman
-        // (yang statusnya sudah "dikembalikan").
-        $riwayat = [
-            [
-                'id' => 1,
-                'judul_buku' => 'Buku Kurikulum Merdeka_Matematika untuk SMA/SMK Kelas X',
-                'url gambar' => asset('/images/buku-1.jpg'),
-                'tanggal_pinjam' => '17 Agustus 2026',
-                'tanggal_kembali' => '20 Agustus 2026',
-                'status' => 'tepat_waktu',
-            ],
-            [
-                'id' => 2,
-                'judul_buku' => 'Laskar Pelangi',
-                'url gambar' => 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=400&q=80',
-                'tanggal_pinjam' => '1 Agustus 2026',
-                'tanggal_kembali' => '10 Agustus 2026',
-                'status' => 'terlambat',
-            ],
-        ];
+        $user = Auth::guard('web')->user();
 
         return view('user.history', [
-            'title' => $title,
-            'riwayat' => $riwayat,
+            'title' => 'PerPusKu - Riwayat Peminjaman',
+            'riwayat' => $user->peminjaman()
+                ->with('buku')
+                ->whereNotNull('dikembalikan_pada')
+                ->latest('dikembalikan_pada')
+                ->get(),
         ]);
     }
 }

@@ -7,10 +7,14 @@ use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['user_id', 'buku_id', 'dipinjam_pada', 'batas_pengembalian', 'dikembalikan_pada'])]
+#[Fillable(['user_id', 'buku_id', 'dipinjam_pada', 'batas_pengembalian', 'dikembalikan_pada', 'status'])]
 #[Table('peminjaman')]
 class Peminjaman extends Model
 {
+    protected $attributes = [
+        'status' => 'pending',
+    ];
+
     /**
      * @return array<string, string>
      */
@@ -31,5 +35,21 @@ class Peminjaman extends Model
     public function buku(): BelongsTo
     {
         return $this->belongsTo(Buku::class, 'buku_id');
+    }
+
+    public function statusEfektif(): string
+    {
+        if ($this->dikembalikan_pada !== null) {
+            return $this->batas_pengembalian !== null
+                && $this->dikembalikan_pada->greaterThan($this->batas_pengembalian)
+                ? 'terlambat'
+                : 'dikembalikan';
+        }
+
+        if ($this->status === 'dipinjam' && $this->batas_pengembalian?->isPast()) {
+            return 'lewat_batas_waktu';
+        }
+
+        return $this->status;
     }
 }

@@ -2,39 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Peminjaman;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class UserStatusController extends Controller
 {
-    public function index(Request $request)
+    public function index(): View
     {
-        $title = 'PerPusKu - Peminjaman Saya';
-
-        // Data contoh. Nanti ganti dengan query dari database/model Peminjaman.
-        $peminjaman = [
-            [
-                'id' => 1,
-                'judul_buku' => 'Buku Kurikulum Merdeka_Matematika untuk SMA/SMK Kelas X',
-                'url gambar' => asset('/images/buku-1.jpg'),
-                'tanggal_pinjam' => '17 Agustus 2026',
-                'batas_kembali' => '24 Agustus 2026',
-                'status' => 'meminjam',
-            ],
-        ];
+        $user = Auth::guard('web')->user();
 
         return view('user.status', [
-            'title' => $title,
-            'peminjaman' => $peminjaman,
+            'title' => 'PerPusKu - Peminjaman Saya',
+            'peminjaman' => $user->peminjaman()
+                ->with('buku')
+                ->latest()
+                ->get(),
         ]);
     }
 
-    public function kembalikan(Request $request, string $id)
+    public function kembalikan(Request $request, Peminjaman $peminjaman): RedirectResponse
     {
-        // TODO: ganti dengan proses update status peminjaman yang sesungguhnya
-        // (set tanggal_kembali, ubah status buku jadi tersedia lagi, dsb)
+        abort_unless($peminjaman->user_id === Auth::guard('web')->id(), 404);
+
+        if (! in_array($peminjaman->statusEfektif(), ['dipinjam', 'lewat_batas_waktu'], true)) {
+            return back()->with('error', 'Peminjaman ini belum dapat dikembalikan.');
+        }
+
+        $dikembalikanPada = now();
+        $peminjaman->dikembalikan_pada = $dikembalikanPada;
+        $peminjaman->status = $dikembalikanPada->greaterThan($peminjaman->batas_pengembalian)
+            ? 'terlambat'
+            : 'dikembalikan';
+        $peminjaman->save();
 
         return redirect()
-            ->route('user.history')
+            ->route('user.status')
             ->with('success', 'Buku berhasil dikembalikan.');
     }
 }

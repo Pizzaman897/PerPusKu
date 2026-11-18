@@ -2,51 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Peminjaman;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class BorrowingController extends Controller
 {
-    public function index()
+    public function index(): View
     {
-        $title = 'PerPusKu - Kelola Status';
-
-        $borrowings = [
-            [
-                'id' => 1,
-                'user_id' => 1,
-                'book_id' => 1,
-                'user' => 'Budi',
-                'book_title' => 'Gajah Minum Air',
-                'borrowed_at' => '01-09-2026',
-                'due_at' => '08-09-2026',
-                'returned_at' => '08-09-2026',
-                'created_at' => '01-09-2026 08:00',
-                'updated_at' => '08-09-2026 10:00',
-                'status' => 'dikembalikan',
-            ],
-            [
-                'id' => 2,
-                'user_id' => 2,
-                'book_id' => 2,
-                'user' => 'Andi',
-                'book_title' => 'Belajar Pemrograman',
-                'borrowed_at' => '01-09-2026',
-                'due_at' => '08-09-2026',
-                'returned_at' => null,
-                'created_at' => '01-09-2026 08:15',
-                'updated_at' => '01-09-2026 08:15',
-                'status' => 'terlambat',
-            ],
-        ];
-
         return view('admin.borrowings.index', [
-            'title' => $title,
-            'borrowings' => $borrowings,
+            'title' => 'PerPusKu - Kelola Status',
+            'borrowings' => Peminjaman::query()
+                ->with(['user', 'buku'])
+                ->latest()
+                ->get(),
         ]);
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Peminjaman $peminjaman): RedirectResponse
     {
-        return "Mengubah status peminjaman dengan ID: {$id}";
+        if ($peminjaman->status !== 'pending') {
+            return back()->with('error', 'Status peminjaman sudah ditetapkan dan tidak dapat diubah lagi.');
+        }
+
+        $validated = $request->validate([
+            'status' => ['sometimes', 'required', Rule::in(['pending', 'dipinjam'])],
+            'batas_pengembalian' => ['sometimes', 'required', 'date', 'after:now'],
+        ]);
+
+        if ($validated === []) {
+            return back()->with('error', 'Pilih status atau atur batas pengembalian terlebih dahulu.');
+        }
+
+        if (($validated['status'] ?? null) === 'dipinjam'
+            && ! isset($validated['batas_pengembalian'])
+            && $peminjaman->batas_pengembalian === null) {
+            return back()->with('error', 'Atur batas pengembalian sebelum menyetujui peminjaman.');
+        }
+
+        $peminjaman->fill($validated)->save();
+
+        return back()->with('success', 'Data peminjaman berhasil diperbarui.');
     }
 }

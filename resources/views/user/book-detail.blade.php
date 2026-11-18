@@ -7,24 +7,24 @@
         <a href="{{ route('user.dashboard') }}" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800">← Kembali ke daftar buku</a>
         <article class="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
             <div class="grid gap-8 sm:grid-cols-[240px_1fr]">
-                <img src="{{ $book['url gambar'] }}" alt="Sampul {{ $book['title'] }}" class="mx-auto aspect-[3/4] w-48 rounded-xl object-cover shadow-md sm:w-full">
+                <img src="{{ asset($book->url_sampul ?: 'images/buku-1.jpg') }}" alt="Sampul {{ $book->judul }}" class="mx-auto aspect-[3/4] w-48 rounded-xl object-cover shadow-md sm:w-full">
                 <div class="flex flex-col">
-                    <p class="text-sm font-semibold text-indigo-600">{{ $book['category'] }}</p>
-                    <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">{{ $book['title'] }}</h1>
-                    <p class="mt-5 leading-7 text-slate-600">{{ $book['description'] }}</p>
-                    <span @class(['mt-6 w-fit rounded-full px-3 py-1 text-xs font-semibold', 'bg-emerald-50 text-emerald-700' => $book['status'] === 'ada', 'bg-red-50 text-red-700' => $book['status'] !== 'ada'])>
-                        {{ $book['status'] === 'ada' ? 'Tersedia' : 'Dipinjam' }}
-                    </span>
-                    <div class="mt-8">
-                        @if ($book['status'] === 'ada')
-                            <form method="POST" action="{{ route('user.book.pinjam', $book['id']) }}">
+                    <p class="text-sm font-semibold text-indigo-600">{{ ucfirst($book->kategori) }}</p>
+                    <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">{{ $book->judul }}</h1>
+                    <p class="mt-5 leading-7 text-slate-600">{{ $book->deskripsi }}</p>
+                    @if ($peminjamanAktif === null)
+                        <span class="mt-6 w-fit rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">Tersedia</span>
+                        <div class="mt-8">
+                            <form method="POST" action="{{ route('user.book.pinjam', $book) }}">
                                 @csrf
                                 <button type="submit" class="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700">Pinjam buku</button>
                             </form>
-                        @else
-                            <button type="button" disabled class="cursor-not-allowed rounded-xl bg-slate-300 px-6 py-3 text-sm font-semibold text-white">Pinjam buku</button>
-                        @endif
-                    </div>
+                        </div>
+                    @else
+                        <span class="mt-6 w-fit rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+                            {{ $peminjamanAktif->statusEfektif() === 'pending' ? 'Menunggu persetujuan' : 'Sedang dipinjam' }}
+                        </span>
+                    @endif
                 </div>
             </div>
         </article>

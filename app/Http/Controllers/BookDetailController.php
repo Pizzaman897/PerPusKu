@@ -2,37 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Buku;
+use App\Models\Peminjaman;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class BookDetailController extends Controller
 {
-    public function show(string $id)
+    public function show(Buku $buku): View
     {
-        $title = 'PerPusKu - Detail Buku';
-
-        $book = [
-            'id' => $id,
-            'title' => 'Buku Kurikulum Merdeka_Matematika untuk SMA/SMK Kelas X',
-            'category' => 'Pelajaran',
-            'description' => 'Buku pelajaran umum, kitab suci, dan buku pelajaran agama dengan harga yang relatif terjangkau masyarakat umum, kitab suci, dan buku pelajaran agama dengan harga yang relatif terjangkau masyarakat.',
-            'status' => 'ada',
-            'url gambar' => asset('/images/buku-1.jpg'),
-        ];
+        $peminjamanAktif = $buku->peminjaman()
+            ->whereNull('dikembalikan_pada')
+            ->latest()
+            ->first();
 
         return view('user.book-detail', [
-            'title' => $title,
-            'book' => $book,
+            'title' => 'PerPusKu - Detail Buku',
+            'book' => $buku,
+            'peminjamanAktif' => $peminjamanAktif,
         ]);
     }
 
-    public function pinjam(Request $request, string $id)
+    public function pinjam(Request $request, Buku $buku): RedirectResponse
     {
-        // TODO: ganti dengan proses simpan peminjaman yang sesungguhnya
-        // (insert ke tabel peminjaman, update status buku, dsb)
-        // begitu kamu sudah punya model/tabel untuk itu.
+        if ($buku->peminjaman()->whereNull('dikembalikan_pada')->exists()) {
+            return back()->with('error', 'Buku sedang menunggu persetujuan atau sedang dipinjam.');
+        }
+
+        Peminjaman::create([
+            'user_id' => Auth::guard('web')->id(),
+            'buku_id' => $buku->id,
+            'dipinjam_pada' => now(),
+            'status' => 'pending',
+        ]);
 
         return redirect()
             ->route('user.status')
-            ->with('success', 'Buku berhasil dipinjam.');
+            ->with('success', 'Permintaan peminjaman dikirim dan menunggu persetujuan admin.');
     }
 }
