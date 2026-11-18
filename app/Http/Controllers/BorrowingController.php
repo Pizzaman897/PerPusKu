@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateBorrowingRequest;
 use App\Models\Peminjaman;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class BorrowingController extends Controller
@@ -21,16 +20,13 @@ class BorrowingController extends Controller
         ]);
     }
 
-    public function update(Request $request, Peminjaman $peminjaman): RedirectResponse
+    public function update(UpdateBorrowingRequest $request, Peminjaman $peminjaman): RedirectResponse
     {
         if ($peminjaman->status !== 'pending') {
             return back()->with('error', 'Status peminjaman sudah ditetapkan dan tidak dapat diubah lagi.');
         }
 
-        $validated = $request->validate([
-            'status' => ['sometimes', 'required', Rule::in(['pending', 'dipinjam'])],
-            'batas_pengembalian' => ['sometimes', 'required', 'date', 'after:now'],
-        ]);
+        $validated = $request->validated();
 
         if ($validated === []) {
             return back()->with('error', 'Pilih status atau atur batas pengembalian terlebih dahulu.');

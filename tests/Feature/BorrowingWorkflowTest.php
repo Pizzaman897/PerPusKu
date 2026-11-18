@@ -111,6 +111,35 @@ it('requires an admin to set a deadline before approving a borrowing', function 
     ]);
 });
 
+it('rejects invalid borrowing status and deadline updates', function () {
+    $this->travelTo('2026-11-18 10:00:00');
+    $admin = new Admin(['name' => 'Admin']);
+    $user = User::factory()->create();
+    $book = Buku::create([
+        'judul' => 'Buku baru',
+        'kategori' => 'Fiksi',
+    ]);
+    $borrowing = Peminjaman::create([
+        'user_id' => $user->id,
+        'buku_id' => $book->id,
+        'dipinjam_pada' => now(),
+        'status' => 'pending',
+    ]);
+
+    $this->actingAs($admin, 'admin')
+        ->put(route('admin.status.update', $borrowing), [
+            'status' => 'ditolak',
+            'batas_pengembalian' => '2026-11-17T10:00',
+        ])
+        ->assertSessionHasErrors(['status', 'batas_pengembalian']);
+
+    $this->assertDatabaseHas('peminjaman', [
+        'id' => $borrowing->id,
+        'status' => 'pending',
+        'batas_pengembalian' => null,
+    ]);
+});
+
 it('does not allow a regular user to change admin borrowing status', function () {
     $user = User::factory()->create();
     $book = Buku::create([
