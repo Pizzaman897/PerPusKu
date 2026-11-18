@@ -13,11 +13,25 @@ class AdminManagementController extends Controller
     /**
      * Tampilkan daftar admin.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $admins = Admin::latest()->paginate(10);
+        $search = $request->query('search');
+        abort_unless($search === null || is_string($search), 422);
+        $search = trim($search ?? '');
+        abort_if(mb_strlen($search) > 255, 422);
 
-        return view('admin.administrators.index', compact('admins'));
+        $admins = Admin::query()
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('admin.administrators.index', compact('admins', 'search'));
     }
 
     /**

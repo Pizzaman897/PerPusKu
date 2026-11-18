@@ -10,16 +10,58 @@ use Illuminate\View\View;
 
 class BookController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $search = $request->query('search');
+        abort_unless($search === null || is_string($search), 422);
+        $search = trim($search ?? '');
+        abort_if(mb_strlen($search) > 255, 422);
+
+        $category = $request->query('category');
+        $category = $category === '' ? null : $category;
+        abort_unless(
+            $category === null || (is_string($category) && in_array($category, Buku::CATEGORIES, true)),
+            422,
+        );
+
+        $status = $request->query('status');
+        $status = $status === '' ? null : $status;
+        abort_unless(
+            $status === null || (is_string($status) && in_array($status, ['available', 'borrowed'], true)),
+            422,
+        );
+
+        $books = Buku::query()
+            ->withExists([
+                'peminjaman as sedang_dipinjam' => fn ($query) => $query->whereNull('dikembalikan_pada'),
+            ])
+            ->when($search !== '', fn ($query) => $query->where('judul', 'like', "%{$search}%"))
+            ->when($category !== null, fn ($query) => $query->where('kategori', $category))
+            ->when(
+                $status === 'available',
+                fn ($query) => $query->whereDoesntHave(
+                    'peminjaman',
+                    fn ($borrowingQuery) => $borrowingQuery->whereNull('dikembalikan_pada'),
+                ),
+            )
+            ->when(
+                $status === 'borrowed',
+                fn ($query) => $query->whereHas(
+                    'peminjaman',
+                    fn ($borrowingQuery) => $borrowingQuery->whereNull('dikembalikan_pada'),
+                ),
+            )
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
         return view('admin.books.index', [
             'title' => 'PerPusKu - Kelola Buku',
-            'books' => Buku::query()
-                ->withExists([
-                    'peminjaman as sedang_dipinjam' => fn ($query) => $query->whereNull('dikembalikan_pada'),
-                ])
-                ->latest()
-                ->get(),
+            'books' => $books,
+            'categories' => Buku::CATEGORIES,
+            'search' => $search,
+            'selectedCategory' => $category,
+            'selectedStatus' => $status,
         ]);
     }
 

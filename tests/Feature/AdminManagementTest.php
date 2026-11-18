@@ -7,6 +7,44 @@ use Illuminate\Support\Facades\Hash;
 
 uses(RefreshDatabase::class);
 
+it('filters admins by name or email', function () {
+    $matchingAdmin = Admin::create([
+        'name' => 'Sari Admin',
+        'email' => 'sari.admin@example.com',
+        'password' => 'Password-Admin-2026',
+    ]);
+    Admin::create([
+        'name' => 'Budi Admin',
+        'email' => 'budi.admin@example.com',
+        'password' => 'Password-Admin-2026',
+    ]);
+
+    $this->actingAs(new Admin(['name' => 'Admin Test']), 'admin')
+        ->get(route('admin.kelola-admin.index', ['search' => 'Sari Admin']))
+        ->assertSee($matchingAdmin->name)
+        ->assertDontSee('Budi Admin')
+        ->assertViewHas('admins', fn ($admins) => $admins->total() === 1);
+});
+
+it('paginates admin results ten per page', function () {
+    $this->actingAs(new Admin(['name' => 'Admin Test']), 'admin');
+
+    foreach (range(1, 11) as $number) {
+        Admin::create([
+            'name' => "Filter Admin {$number}",
+            'email' => "filter.admin.{$number}@example.com",
+            'password' => 'Password-Admin-2026',
+        ]);
+    }
+
+    $this->get(route('admin.kelola-admin.index', ['search' => 'Filter Admin']))
+        ->assertViewHas('admins', fn ($admins) => $admins->total() === 11 && $admins->count() === 10)
+        ->assertSee('search=Filter%20Admin', false);
+
+    $this->get(route('admin.kelola-admin.index', ['search' => 'Filter Admin', 'page' => 2]))
+        ->assertViewHas('admins', fn ($admins) => $admins->total() === 11 && $admins->count() === 1);
+});
+
 it('shows password fields when creating and editing an admin', function () {
     $this->actingAs(new Admin(['name' => 'Admin Test']), 'admin');
 

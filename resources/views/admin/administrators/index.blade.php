@@ -12,6 +12,17 @@
         <a href="{{ route('admin.kelola-admin.create') }}" class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700">Tambah admin</a>
     </div>
 
+    <form method="GET" action="{{ route('admin.kelola-admin.index') }}" class="mb-6 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:flex-row sm:items-end">
+        <div class="flex-1">
+            <label for="search" class="mb-2 block text-sm font-semibold text-slate-700">Cari nama atau email</label>
+            <input id="search" name="search" type="search" value="{{ $search }}" maxlength="255" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" placeholder="Masukkan nama atau email">
+        </div>
+        <button type="submit" class="rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700">Filter</button>
+        @if ($search !== '')
+            <a href="{{ route('admin.kelola-admin.index') }}" class="rounded-xl border border-slate-300 px-5 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50">Reset</a>
+        @endif
+    </form>
+
     <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div class="overflow-x-auto">
             <table class="w-full min-w-[600px] text-left text-sm">
@@ -53,5 +64,7 @@
         </div>
     </section>
 
-    <div class="mt-5">{{ $admins->links() }}</div>
+    @if ($admins->hasPages())
+        <div class="mt-5">{{ $admins->links() }}</div>
+    @endif
 @endsection

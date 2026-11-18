@@ -24,6 +24,36 @@
         <a href="{{ route('admin.buku.create') }}" class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700">Tambah buku</a>
     </div>
 
+    <form method="GET" action="{{ route('admin.buku.index') }}" class="mb-6 grid gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:grid-cols-2 xl:grid-cols-4">
+        <div>
+            <label for="search" class="mb-2 block text-sm font-semibold text-slate-700">Cari judul</label>
+            <input id="search" name="search" type="search" value="{{ $search }}" maxlength="255" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" placeholder="Masukkan judul buku">
+        </div>
+        <div>
+            <label for="category" class="mb-2 block text-sm font-semibold text-slate-700">Kategori</label>
+            <select id="category" name="category" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
+                <option value="">Semua kategori</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category }}" @selected($selectedCategory === $category)>{{ $category }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div>
+            <label for="status" class="mb-2 block text-sm font-semibold text-slate-700">Status</label>
+            <select id="status" name="status" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
+                <option value="">Semua status</option>
+                <option value="available" @selected($selectedStatus === 'available')>Tersedia</option>
+                <option value="borrowed" @selected($selectedStatus === 'borrowed')>Dipinjam</option>
+            </select>
+        </div>
+        <div class="flex items-end gap-3">
+            <button type="submit" class="flex-1 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700">Filter</button>
+            @if ($search !== '' || $selectedCategory !== null || $selectedStatus !== null)
+                <a href="{{ route('admin.buku.index') }}" class="rounded-xl border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50">Reset</a>
+            @endif
+        </div>
+    </form>
+
     <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div class="border-b border-slate-100 px-5 py-4">
             <h2 class="font-semibold text-slate-900">Daftar buku</h2>
@@ -80,5 +110,10 @@
                 </tbody>
             </table>
         </div>
+        @if ($books->hasPages())
+            <div class="border-t border-slate-100 px-5 py-4">
+                {{ $books->links() }}
+            </div>
+        @endif
     </section>
 @endsection

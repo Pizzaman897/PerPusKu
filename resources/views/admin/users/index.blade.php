@@ -26,9 +26,20 @@
         </a>
     </div>
 
+    <form method="GET" action="{{ route('admin.users.index') }}" class="mb-6 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:flex-row sm:items-end">
+        <div class="flex-1">
+            <label for="search" class="mb-2 block text-sm font-semibold text-slate-700">Cari nama atau email</label>
+            <input id="search" name="search" type="search" value="{{ $search }}" maxlength="255" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" placeholder="Masukkan nama atau email">
+        </div>
+        <button type="submit" class="rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700">Filter</button>
+        @if ($search !== '')
+            <a href="{{ route('admin.users.index') }}" class="rounded-xl border border-slate-300 px-5 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50">Reset</a>
+        @endif
+    </form>
+
     <section class="mb-6 rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 to-white p-5 sm:p-6">
         <p class="text-sm font-medium text-indigo-700">Total user terdaftar</p>
-        <p class="mt-2 text-3xl font-bold text-slate-900">{{ $users->count() }}</p>
+        <p class="mt-2 text-3xl font-bold text-slate-900">{{ $users->total() }}</p>
     </section>
 
     <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -71,5 +82,10 @@
                 </tbody>
             </table>
         </div>
+        @if ($users->hasPages())
+            <div class="border-t border-slate-100 px-5 py-4">
+                {{ $users->links() }}
+            </div>
+        @endif
     </section>
 @endsection

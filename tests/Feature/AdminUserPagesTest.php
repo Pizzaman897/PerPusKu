@@ -35,6 +35,38 @@ it('renders persisted users with delete actions', function () {
         ->assertSee('Hapus');
 });
 
+it('filters users by name or email', function () {
+    $matchingUser = User::factory()->create([
+        'name' => 'Dina Pratama',
+        'email' => 'dina.pratama@example.com',
+    ]);
+    User::factory()->create([
+        'name' => 'Rudi Santoso',
+        'email' => 'rudi.santoso@example.com',
+    ]);
+
+    $this->get(route('admin.users.index', ['search' => 'dina.pratama@example.com']))
+        ->assertSee($matchingUser->name)
+        ->assertDontSee('Rudi Santoso')
+        ->assertViewHas('users', fn ($users) => $users->total() === 1);
+});
+
+it('paginates user results ten per page', function () {
+    foreach (range(1, 11) as $number) {
+        User::factory()->create([
+            'name' => "Filter User {$number}",
+            'email' => "filter.user.{$number}@example.com",
+        ]);
+    }
+
+    $this->get(route('admin.users.index', ['search' => 'Filter User']))
+        ->assertViewHas('users', fn ($users) => $users->total() === 11 && $users->count() === 10)
+        ->assertSee('search=Filter%20User', false);
+
+    $this->get(route('admin.users.index', ['search' => 'Filter User', 'page' => 2]))
+        ->assertViewHas('users', fn ($users) => $users->total() === 11 && $users->count() === 1);
+});
+
 it('renders the user creation form inside the admin layout', function () {
     $this->get(route('admin.users.create'))
         ->assertSee('PerPusKu')

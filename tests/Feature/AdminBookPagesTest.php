@@ -52,6 +52,78 @@ it('shows book identifiers in the collection list and keeps availability derived
         ->assertDontSee('name="status"', false);
 });
 
+it('filters books by title, category, and borrowed status', function () {
+    $borrowedBook = Buku::create([
+        'judul' => 'Matematika Kelas Delapan',
+        'kategori' => 'Pelajaran',
+    ]);
+    $availableBook = Buku::create([
+        'judul' => 'Matematika Kelas Tujuh',
+        'kategori' => 'Pelajaran',
+    ]);
+    $otherCategoryBook = Buku::create([
+        'judul' => 'Matematika Novel',
+        'kategori' => 'Novel',
+    ]);
+    $user = User::factory()->create();
+
+    Peminjaman::create([
+        'user_id' => $user->id,
+        'buku_id' => $borrowedBook->id,
+        'dipinjam_pada' => now(),
+        'status' => 'dipinjam',
+    ]);
+
+    $this->get(route('admin.buku.index', [
+        'search' => 'Matematika',
+        'category' => 'Pelajaran',
+        'status' => 'borrowed',
+    ]))
+        ->assertSee($borrowedBook->judul)
+        ->assertDontSee($availableBook->judul)
+        ->assertDontSee($otherCategoryBook->judul)
+        ->assertViewHas('books', fn ($books) => $books->total() === 1);
+});
+
+it('filters books that are available to borrow', function () {
+    $availableBook = Buku::create([
+        'judul' => 'Buku Tersedia',
+        'kategori' => 'Novel',
+    ]);
+    $borrowedBook = Buku::create([
+        'judul' => 'Buku Sedang Dipinjam',
+        'kategori' => 'Novel',
+    ]);
+    $user = User::factory()->create();
+
+    Peminjaman::create([
+        'user_id' => $user->id,
+        'buku_id' => $borrowedBook->id,
+        'dipinjam_pada' => now(),
+        'status' => 'dipinjam',
+    ]);
+
+    $this->get(route('admin.buku.index', ['status' => 'available']))
+        ->assertSee($availableBook->judul)
+        ->assertDontSee($borrowedBook->judul);
+});
+
+it('paginates filtered book results while keeping the search query', function () {
+    foreach (range(1, 11) as $number) {
+        Buku::create([
+            'judul' => "Buku Pencarian {$number}",
+            'kategori' => 'Pelajaran',
+        ]);
+    }
+
+    $this->get(route('admin.buku.index', ['search' => 'Buku Pencarian']))
+        ->assertViewHas('books', fn ($books) => $books->total() === 11 && $books->count() === 10)
+        ->assertSee('search=Buku%20Pencarian', false);
+
+    $this->get(route('admin.buku.index', ['search' => 'Buku Pencarian', 'page' => 2]))
+        ->assertViewHas('books', fn ($books) => $books->total() === 11 && $books->count() === 1);
+});
+
 it('creates a book with the submitted details', function () {
     $this->post(route('admin.buku.store'), [
         'title' => 'Petualangan Baru',
