@@ -20,6 +20,7 @@ class UserDashboardController extends Controller
         );
 
         $books = Buku::query()
+            ->where('aktif', true)
             ->when($selectedCategory !== null, fn ($query) => $query->where('kategori', $selectedCategory))
             ->withExists([
                 'peminjaman as sedang_dipinjam' => fn ($query) => $query->whereNull('dikembalikan_pada'),

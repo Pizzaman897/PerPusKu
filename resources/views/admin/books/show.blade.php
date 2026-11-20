@@ -11,7 +11,9 @@
                 <div class="flex flex-col">
                     <div class="flex flex-wrap items-center gap-3">
                         <p class="text-sm font-semibold text-indigo-600">{{ ucfirst($book->kategori) }}</p>
-                        @if ($sedangDipinjam)
+                        @if (! $book->aktif)
+                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">Nonaktif</span>
+                        @elseif ($sedangDipinjam)
                             <span class="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">Dipinjam</span>
                         @else
                             <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">Tersedia</span>

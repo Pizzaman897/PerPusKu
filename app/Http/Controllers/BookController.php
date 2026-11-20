@@ -27,30 +27,30 @@ class BookController extends Controller
         $status = $request->query('status');
         $status = $status === '' ? null : $status;
         abort_unless(
-            $status === null || (is_string($status) && in_array($status, ['available', 'borrowed'], true)),
+            $status === null || (is_string($status) && in_array($status, ['available', 'borrowed', 'disabled'], true)),
             422,
         );
 
         $books = Buku::query()
             ->withExists([
+                'peminjaman as memiliki_riwayat' => fn ($query) => $query,
                 'peminjaman as sedang_dipinjam' => fn ($query) => $query->whereNull('dikembalikan_pada'),
             ])
             ->when($search !== '', fn ($query) => $query->where('judul', 'like', "%{$search}%"))
             ->when($category !== null, fn ($query) => $query->where('kategori', $category))
             ->when(
                 $status === 'available',
-                fn ($query) => $query->whereDoesntHave(
-                    'peminjaman',
-                    fn ($borrowingQuery) => $borrowingQuery->whereNull('dikembalikan_pada'),
-                ),
+                fn ($query) => $query
+                    ->where('aktif', true)
+                    ->whereDoesntHave('peminjaman', fn ($borrowingQuery) => $borrowingQuery->whereNull('dikembalikan_pada')),
             )
             ->when(
                 $status === 'borrowed',
-                fn ($query) => $query->whereHas(
-                    'peminjaman',
-                    fn ($borrowingQuery) => $borrowingQuery->whereNull('dikembalikan_pada'),
-                ),
+                fn ($query) => $query
+                    ->where('aktif', true)
+                    ->whereHas('peminjaman', fn ($borrowingQuery) => $borrowingQuery->whereNull('dikembalikan_pada')),
             )
+            ->when($status === 'disabled', fn ($query) => $query->where('aktif', false))
             ->latest()
             ->paginate(10)
             ->withQueryString();
@@ -145,5 +145,15 @@ class BookController extends Controller
         return redirect()
             ->route('admin.buku.index')
             ->with('success', 'Buku berhasil dihapus.');
+    }
+
+    public function toggleActive(Buku $buku): RedirectResponse
+    {
+        $buku->update(['aktif' => ! $buku->aktif]);
+
+        return back()->with(
+            'success',
+            $buku->aktif ? 'Buku berhasil diaktifkan.' : 'Buku berhasil dinonaktifkan.',
+        );
     }
 }

@@ -60,7 +60,7 @@
                     <input id="image_url" name="image_url" type="url" value="{{ old('image_url', $buku->url_sampul) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100">
                     @error('image_url')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
-                <p class="rounded-xl bg-indigo-50 px-4 py-3 text-sm text-indigo-800">Status buku mengikuti data peminjaman dan pengembalian, jadi tidak diubah dari formulir ini.</p>
+                <p class="rounded-xl bg-indigo-50 px-4 py-3 text-sm text-indigo-800">Ketersediaan mengikuti data peminjaman. Status aktif atau nonaktif diatur dari daftar buku.</p>
                 <div class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
                     <a href="{{ route('admin.buku.index') }}" class="rounded-xl border border-slate-300 px-5 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50">Batal</a>
                     <button type="submit" class="rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700">Simpan perubahan</button>

@@ -42,7 +42,7 @@ it('shows book identifiers in the collection list and keeps availability derived
         ->assertSee('Tersedia');
 
     $this->get(route('admin.buku.create'))
-        ->assertSee('Status awal buku otomatis')
+        ->assertSee('Buku baru otomatis')
         ->assertSee('value="Pelajaran"', false)
         ->assertSee('value="Novel"', false)
         ->assertSee('value="Komik"', false)
@@ -106,6 +106,23 @@ it('filters books that are available to borrow', function () {
     $this->get(route('admin.buku.index', ['status' => 'available']))
         ->assertSee($availableBook->judul)
         ->assertDontSee($borrowedBook->judul);
+});
+
+it('filters inactive books separately from books available to borrow', function () {
+    Buku::create([
+        'judul' => 'Buku Nonaktif',
+        'kategori' => 'Novel',
+        'aktif' => false,
+    ]);
+    $activeBook = Buku::create([
+        'judul' => 'Buku Aktif',
+        'kategori' => 'Novel',
+    ]);
+
+    $this->get(route('admin.buku.index', ['status' => 'disabled']))
+        ->assertSee('Buku Nonaktif')
+        ->assertDontSee($activeBook->judul)
+        ->assertSee('Nonaktif');
 });
 
 it('paginates filtered book results while keeping the search query', function () {
@@ -272,4 +289,48 @@ it('keeps a book that has borrowing history', function () {
         ->assertSessionHas('error', 'Buku tidak dapat dihapus karena memiliki riwayat peminjaman.');
 
     $this->assertModelExists($book);
+});
+
+it('disables and reactivates a book with borrowing history without deleting it', function () {
+    $user = User::factory()->create();
+    $book = Buku::create([
+        'judul' => 'Buku dengan riwayat yang dinonaktifkan',
+        'kategori' => 'Novel',
+    ]);
+    $borrowing = Peminjaman::create([
+        'user_id' => $user->id,
+        'buku_id' => $book->id,
+        'dipinjam_pada' => '2026-11-18 09:00:00',
+        'batas_pengembalian' => '2026-11-19 09:00:00',
+        'dikembalikan_pada' => '2026-11-18 10:00:00',
+        'status' => 'dikembalikan',
+    ]);
+
+    $this->from(route('admin.buku.index'))
+        ->patch(route('admin.buku.toggle-active', $book))
+        ->assertRedirect(route('admin.buku.index'))
+        ->assertSessionHas('success', 'Buku berhasil dinonaktifkan.');
+
+    $this->assertDatabaseHas('buku', [
+        'id' => $book->id,
+        'aktif' => false,
+    ]);
+    $this->assertModelExists($book);
+    $this->assertModelExists($borrowing);
+
+    $this->get(route('admin.buku.index', ['status' => 'disabled']))
+        ->assertSee($book->judul)
+        ->assertSee('Nonaktif')
+        ->assertSee('Aktifkan')
+        ->assertDontSee('Hapus');
+
+    $this->from(route('admin.buku.index', ['status' => 'disabled']))
+        ->patch(route('admin.buku.toggle-active', $book))
+        ->assertRedirect(route('admin.buku.index', ['status' => 'disabled']))
+        ->assertSessionHas('success', 'Buku berhasil diaktifkan.');
+
+    $this->assertDatabaseHas('buku', [
+        'id' => $book->id,
+        'aktif' => true,
+    ]);
 });

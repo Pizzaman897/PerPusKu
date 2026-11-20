@@ -13,6 +13,8 @@ class BookDetailController extends Controller
 {
     public function show(Buku $buku): View
     {
+        abort_unless($buku->aktif, 404);
+
         $peminjamanAktif = $buku->peminjaman()
             ->whereNull('dikembalikan_pada')
             ->latest()
@@ -27,6 +29,8 @@ class BookDetailController extends Controller
 
     public function pinjam(Request $request, Buku $buku): RedirectResponse
     {
+        abort_unless($buku->aktif, 404);
+
         if ($buku->peminjaman()->whereNull('dikembalikan_pada')->exists()) {
             return back()->with('error', 'Buku sedang menunggu persetujuan atau sedang dipinjam.');
         }

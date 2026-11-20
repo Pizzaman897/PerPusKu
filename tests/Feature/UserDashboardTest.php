@@ -42,6 +42,32 @@ it('shows all books when the all-categories filter is selected', function () {
         ->assertViewHas('selectedCategory', null);
 });
 
+it('does not show inactive books in the user catalog', function () {
+    Buku::create([
+        'judul' => 'Buku yang dinonaktifkan',
+        'kategori' => 'Novel',
+        'aktif' => false,
+    ]);
+    Buku::create([
+        'judul' => 'Buku yang masih aktif',
+        'kategori' => 'Novel',
+    ]);
+
+    $this->get(route('user.dashboard'))
+        ->assertSee('Buku yang masih aktif')
+        ->assertDontSee('Buku yang dinonaktifkan');
+});
+
+it('does not show a disabled book detail to users', function () {
+    $book = Buku::create([
+        'judul' => 'Detail buku nonaktif',
+        'kategori' => 'Novel',
+        'aktif' => false,
+    ]);
+
+    $this->get(route('user.book.show', $book))->assertNotFound();
+});
+
 it('returns not found for an unsupported dashboard category filter', function () {
     $this->get(route('user.dashboard', ['category' => 'Fiksi']))
         ->assertNotFound();

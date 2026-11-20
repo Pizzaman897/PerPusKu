@@ -34,6 +34,21 @@ it('creates a pending borrowing request for the signed-in user', function () {
         ->assertSee('Belum diatur admin');
 });
 
+it('rejects a borrowing request for a disabled book', function () {
+    $user = User::factory()->create();
+    $book = Buku::create([
+        'judul' => 'Buku nonaktif',
+        'kategori' => 'Novel',
+        'aktif' => false,
+    ]);
+
+    $this->actingAs($user, 'web')
+        ->post(route('user.book.pinjam', $book))
+        ->assertNotFound();
+
+    $this->assertDatabaseCount('peminjaman', 0);
+});
+
 it('shows a borrowing as overdue after its Jakarta deadline', function () {
     $this->travelTo(Carbon::parse('2026-11-18 10:00:00', 'Asia/Jakarta'));
     $user = User::factory()->create();

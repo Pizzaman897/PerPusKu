@@ -87,6 +87,9 @@ Route::prefix('admin')
         // Kelola Buku
         // ----------------------------------------------------
 
+        Route::patch('buku/{buku}/aktif', [BookController::class, 'toggleActive'])
+            ->name('buku.toggle-active');
+
         Route::resource('buku', BookController::class);
 
         // ----------------------------------------------------

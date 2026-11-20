@@ -44,6 +44,7 @@
                 <option value="">Semua status</option>
                 <option value="available" @selected($selectedStatus === 'available')>Tersedia</option>
                 <option value="borrowed" @selected($selectedStatus === 'borrowed')>Dipinjam</option>
+                <option value="disabled" @selected($selectedStatus === 'disabled')>Nonaktif</option>
             </select>
         </div>
         <div class="flex items-end gap-3">
@@ -84,7 +85,9 @@
                             </td>
                             <td class="px-5 py-4 text-slate-600">{{ ucfirst($book->kategori) }}</td>
                             <td class="px-5 py-4">
-                                @if ($book->sedang_dipinjam)
+                                @if (! $book->aktif)
+                                    <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">Nonaktif</span>
+                                @elseif ($book->sedang_dipinjam)
                                     <span class="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">Dipinjam</span>
                                 @else
                                     <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">Tersedia</span>
@@ -94,11 +97,20 @@
                                 <div class="flex justify-end gap-3">
                                     <a href="{{ route('admin.buku.show', $book->id) }}" class="font-medium text-indigo-600 hover:text-indigo-800">Detail</a>
                                     <a href="{{ route('admin.buku.edit', $book->id) }}" class="font-medium text-slate-600 hover:text-indigo-700">Edit</a>
-                                    <form action="{{ route('admin.buku.destroy', $book) }}" method="POST">
+                                    <form action="{{ route('admin.buku.toggle-active', $book) }}" method="POST">
                                         @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="font-medium text-red-600 hover:text-red-800">Hapus</button>
+                                        @method('PATCH')
+                                        <button type="submit" class="font-medium text-amber-700 hover:text-amber-900">
+                                            {{ $book->aktif ? 'Nonaktifkan' : 'Aktifkan' }}
+                                        </button>
                                     </form>
+                                    @if (! $book->memiliki_riwayat)
+                                        <form action="{{ route('admin.buku.destroy', $book) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="font-medium text-red-600 hover:text-red-800">Hapus</button>
+                                        </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
