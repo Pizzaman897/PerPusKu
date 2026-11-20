@@ -230,8 +230,8 @@ it('shows only active borrowings on the status page and completed ones in histor
         ->assertDontSee($activeBook->judul);
 });
 
-it('lets the admin set a final return status and moves the book to history', function (string $status, string $label) {
-    $this->travelTo('2026-11-19 10:00:00');
+it('lets the admin set the final status allowed by the deadline and moves the book to history', function (string $status, string $now, string $deadline, string $label) {
+    $this->travelTo($now);
     $admin = new Admin(['name' => 'Admin']);
     $user = User::factory()->create();
     $book = Buku::create([
@@ -242,7 +242,7 @@ it('lets the admin set a final return status and moves the book to history', fun
         'user_id' => $user->id,
         'buku_id' => $book->id,
         'dipinjam_pada' => '2026-11-18 10:00:00',
-        'batas_pengembalian' => '2026-11-20 10:00:00',
+        'batas_pengembalian' => $deadline,
         'status' => 'dipinjam',
     ]);
 
@@ -254,7 +254,7 @@ it('lets the admin set a final return status and moves the book to history', fun
     $this->assertDatabaseHas('peminjaman', [
         'id' => $borrowing->id,
         'status' => $status,
-        'dikembalikan_pada' => '2026-11-19 10:00:00',
+        'dikembalikan_pada' => $now,
     ]);
 
     $this->actingAs($user, 'web')
@@ -274,9 +274,105 @@ it('lets the admin set a final return status and moves the book to history', fun
         'status' => $status,
     ]);
 })->with([
-    'returned' => ['dikembalikan', 'Dikembalikan'],
-    'late' => ['terlambat', 'Terlambat'],
+    'returned before deadline' => ['dikembalikan', '2026-11-19 10:00:00', '2026-11-20 10:00:00', 'Dikembalikan'],
+    'late after deadline' => ['terlambat', '2026-11-21 10:00:00', '2026-11-20 10:00:00', 'Terlambat'],
 ]);
+
+it('rejects a final status that conflicts with the deadline', function (string $status, string $now, string $deadline, string $message) {
+    $this->travelTo($now);
+    $admin = new Admin(['name' => 'Admin']);
+    $user = User::factory()->create();
+    $book = Buku::create([
+        'judul' => 'Buku belum selesai',
+        'kategori' => 'Fiksi',
+    ]);
+    $borrowing = Peminjaman::create([
+        'user_id' => $user->id,
+        'buku_id' => $book->id,
+        'dipinjam_pada' => '2026-11-18 10:00:00',
+        'batas_pengembalian' => $deadline,
+        'status' => 'dipinjam',
+    ]);
+
+    $this->actingAs($admin, 'admin')
+        ->put(route('admin.status.update', $borrowing), ['status' => $status])
+        ->assertRedirect()
+        ->assertSessionHas('error', $message);
+
+    $this->assertDatabaseHas('peminjaman', [
+        'id' => $borrowing->id,
+        'status' => 'dipinjam',
+        'dikembalikan_pada' => null,
+    ]);
+})->with([
+    'not late before deadline' => [
+        'terlambat',
+        '2026-11-19 10:00:00',
+        '2026-11-20 10:00:00',
+        'Batas pengembalian belum lewat; status hanya dapat diubah menjadi Dikembalikan.',
+    ],
+    'not on-time after deadline' => [
+        'dikembalikan',
+        '2026-11-21 10:00:00',
+        '2026-11-20 10:00:00',
+        'Batas pengembalian sudah lewat; status hanya dapat diubah menjadi Terlambat.',
+    ],
+]);
+
+it('does not allow a pending borrowing to be completed without approval', function () {
+    $this->travelTo('2026-11-18 10:00:00');
+    $admin = new Admin(['name' => 'Admin']);
+    $user = User::factory()->create();
+    $book = Buku::create([
+        'judul' => 'Buku masih Pending',
+        'kategori' => 'Fiksi',
+    ]);
+    $borrowing = Peminjaman::create([
+        'user_id' => $user->id,
+        'buku_id' => $book->id,
+        'dipinjam_pada' => now(),
+        'batas_pengembalian' => now()->addDay(),
+        'status' => 'pending',
+    ]);
+
+    $this->actingAs($admin, 'admin')
+        ->put(route('admin.status.update', $borrowing), ['status' => 'dikembalikan'])
+        ->assertRedirect()
+        ->assertSessionHas('error', 'Peminjaman harus disetujui sebelum dapat diselesaikan.');
+
+    $this->assertDatabaseHas('peminjaman', [
+        'id' => $borrowing->id,
+        'status' => 'pending',
+        'dikembalikan_pada' => null,
+    ]);
+});
+
+it('requires a future deadline when approving a pending borrowing', function () {
+    $this->travelTo('2026-11-21 10:00:00');
+    $admin = new Admin(['name' => 'Admin']);
+    $user = User::factory()->create();
+    $book = Buku::create([
+        'judul' => 'Batas peminjaman sudah lewat',
+        'kategori' => 'Fiksi',
+    ]);
+    $borrowing = Peminjaman::create([
+        'user_id' => $user->id,
+        'buku_id' => $book->id,
+        'dipinjam_pada' => '2026-11-18 10:00:00',
+        'batas_pengembalian' => '2026-11-20 10:00:00',
+        'status' => 'pending',
+    ]);
+
+    $this->actingAs($admin, 'admin')
+        ->put(route('admin.status.update', $borrowing), ['status' => 'dipinjam'])
+        ->assertRedirect()
+        ->assertSessionHas('error', 'Batas pengembalian sudah lewat; atur ulang sebelum menyetujui peminjaman.');
+
+    $this->assertDatabaseHas('peminjaman', [
+        'id' => $borrowing->id,
+        'status' => 'pending',
+    ]);
+});
 
 it('does not expose a user return action or endpoint', function () {
     $user = User::factory()->create();

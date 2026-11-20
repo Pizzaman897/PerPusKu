@@ -40,10 +40,37 @@ class BorrowingController extends Controller
             return back()->with('error', 'Pilih status atau atur batas pengembalian terlebih dahulu.');
         }
 
+        $statusBaru = $validated['status'] ?? null;
+
+        if ($peminjaman->status === 'pending' && in_array($statusBaru, ['dikembalikan', 'terlambat'], true)) {
+            return back()->with('error', 'Peminjaman harus disetujui sebelum dapat diselesaikan.');
+        }
+
+        if ($peminjaman->status === 'dipinjam' && $statusBaru !== null) {
+            $statusEfektif = $peminjaman->statusEfektif();
+            $statusSelesaiYangDiizinkan = $statusEfektif === 'lewat_batas_waktu'
+                ? 'terlambat'
+                : 'dikembalikan';
+
+            if ($statusBaru !== $statusSelesaiYangDiizinkan) {
+                $pesan = $statusEfektif === 'lewat_batas_waktu'
+                    ? 'Batas pengembalian sudah lewat; status hanya dapat diubah menjadi Terlambat.'
+                    : 'Batas pengembalian belum lewat; status hanya dapat diubah menjadi Dikembalikan.';
+
+                return back()->with('error', $pesan);
+            }
+        }
+
         if (($validated['status'] ?? null) === 'dipinjam'
             && ! isset($validated['batas_pengembalian'])
             && $peminjaman->batas_pengembalian === null) {
             return back()->with('error', 'Atur batas pengembalian sebelum menyetujui peminjaman.');
+        }
+
+        if (($validated['status'] ?? null) === 'dipinjam'
+            && ! isset($validated['batas_pengembalian'])
+            && $peminjaman->batas_pengembalian?->isPast()) {
+            return back()->with('error', 'Batas pengembalian sudah lewat; atur ulang sebelum menyetujui peminjaman.');
         }
 
         if (in_array($validated['status'] ?? null, ['dikembalikan', 'terlambat'], true)) {

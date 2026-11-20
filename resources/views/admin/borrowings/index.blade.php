@@ -87,12 +87,15 @@
                                         @csrf
                                         @method('PUT')
                                         <select name="status" required class="rounded-lg border border-slate-300 px-2 py-2 text-xs text-slate-700 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100">
+                                            <option value="" selected disabled>Pilih status</option>
                                             @if ($borrowing->status === 'pending')
-                                                <option value="pending" selected>Pending</option>
+                                                <option value="pending">Pending</option>
+                                                <option value="dipinjam">Sedang dipinjam</option>
+                                            @elseif ($status === 'lewat_batas_waktu')
+                                                <option value="terlambat">Terlambat</option>
+                                            @else
+                                                <option value="dikembalikan">Dikembalikan</option>
                                             @endif
-                                            <option value="dipinjam" @selected($borrowing->status === 'dipinjam')>Sedang dipinjam</option>
-                                            <option value="dikembalikan">Dikembalikan</option>
-                                            <option value="terlambat">Terlambat</option>
                                         </select>
                                         <button type="submit" class="w-fit text-xs font-semibold text-indigo-600 hover:text-indigo-800">Simpan status</button>
                                     </form>
