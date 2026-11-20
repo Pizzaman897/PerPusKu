@@ -30,6 +30,7 @@ Below are the list off technology that we use for this project:
 - Tailwind
 - GitHub
 - Blade
+- Photoshop
 
 In short: it’s a tool for users to reserve books and for librarians to manage reservations.
 
